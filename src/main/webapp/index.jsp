@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="com.exavalu.pojos.CustomMessage"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +8,7 @@
 <title>Login Page</title>
 <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
-<body>
+<body>  
 
 	<%@ include file="pages/components/header.jsp"%>
 
@@ -32,12 +32,7 @@
 			<div class="login-container">
 				<div class="login-form">
 					<h1>Log In</h1>
-					<span class="mb-2 text-danger"> <%
-										CustomMessage msgObj= (CustomMessage)request.getAttribute("MSG");
-										if(msgObj !=null)
-										out.print(msgObj.getMessage());
-									%>
-					</span>
+					
 					<form action="Login" method="post">
 						<div class="form-group">
 							<label for="email">Email:</label> <input type="email" id="email"
