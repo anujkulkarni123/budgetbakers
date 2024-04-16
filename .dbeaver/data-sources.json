@@ -1,7 +1,7 @@
 {
 	"folders": {},
 	"connections": {
-		"mysql8-18edde4b439-4b9ef6055a7f5164": {
+		"mysql8-18ee2747a5d-3d639fca73a2946f": {
 			"provider": "mysql",
 			"driver": "mysql8",
 			"name": "localhost",
@@ -13,7 +13,13 @@
 				"configurationType": "MANUAL",
 				"home": "/usr/local/Cellar/mysql/8.3.0_1",
 				"type": "dev",
-				"auth-model": "native"
+				"properties": {
+					"connectTimeout": "20000",
+					"rewriteBatchedStatements": "true",
+					"enabledTLSProtocols": "TLSv1,TLSv1.1,TLSv1.2"
+				},
+				"auth-model": "native",
+				"handlers": {}
 			}
 		}
 	},

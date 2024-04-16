@@ -38,52 +38,7 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// Here I need to get all the values received
-		String emailAddress = request.getParameter("emailAddress");
-		String password = request.getParameter("password");
-
-		ServletContext context = getServletContext();
-	    Properties properties = new Properties();
-	    PropertyValues propertyValues = PropertyValues.getInstance();
-
-	    try (InputStream input = context.getResourceAsStream("/WEB-INF/config.properties")) {
-	        if (input == null) {
-	            throw new IOException("Cannot find configuration file");
-	        }
-	        properties.load(input);
-	        
-	        System.out.println(properties.getProperty("dbname"));
-	        
-	        String dbName = properties.getProperty("dbname");
-	        String url = properties.getProperty("url");
-	        String user = properties.getProperty("user");
-	        String dbpassword = properties.getProperty("password");
-	        
-	        propertyValues.setDbname(dbName);
-	        propertyValues.setPassword(dbpassword);
-	        propertyValues.setUrl(url);
-	        propertyValues.setUser(user);
-	        
-	        System.out.println("Database Name: " + propertyValues.getDbname());
-	        System.out.println("URL: " + propertyValues.getUrl());
-
-		} catch (IOException e) {
-			e.printStackTrace(); // Handle the exception appropriately
-		}
-		
-		boolean user = UserService.validateUser(emailAddress, password, propertyValues);
-		
-
-		if (user) {
-			request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
-		} else {
-			//go back to login page with error message
-			CustomMessage msg = new CustomMessage();
-			msg.setMessage("Either email address or password is wrong");
-			request.setAttribute("MSG", msg);
-			request.getRequestDispatcher("index.jsp").forward(request, response);
-		}
+		request.getRequestDispatcher("index.jsp").forward(request, response);
 	}
 
 	/**
@@ -93,7 +48,52 @@ public class Login extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		// TODO Auto-generated method stub
+				// Here I need to get all the values received
+				String emailAddress = request.getParameter("emailAddress");
+				String password = request.getParameter("password");
+
+				ServletContext context = getServletContext();
+			    Properties properties = new Properties();
+			    PropertyValues propertyValues = PropertyValues.getInstance();
+
+			    try (InputStream input = context.getResourceAsStream("/WEB-INF/config.properties")) {
+			        if (input == null) {
+			            throw new IOException("Cannot find configuration file");
+			        }
+			        properties.load(input);
+			        
+			        System.out.println(properties.getProperty("dbname"));
+			        
+			        String dbName = properties.getProperty("dbname");
+			        String url = properties.getProperty("url");
+			        String user = properties.getProperty("user");
+			        String dbpassword = properties.getProperty("password");
+			        
+			        propertyValues.setDbname(dbName);
+			        propertyValues.setPassword(dbpassword);
+			        propertyValues.setUrl(url);
+			        propertyValues.setUser(user);
+			        
+			        System.out.println("Database Name: " + propertyValues.getDbname());
+			        System.out.println("URL: " + propertyValues.getUrl());
+
+				} catch (IOException e) {
+					e.printStackTrace(); // Handle the exception appropriately
+				}
+				
+				boolean user = UserService.validateUser(emailAddress, password, propertyValues);
+				
+
+				if (user) {
+					request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
+				} else {
+					//go back to login page with error message
+					CustomMessage msg = new CustomMessage();
+					msg.setMessage("Either email address or password is wrong");
+					request.setAttribute("MSG", msg);
+					request.getRequestDispatcher("index.jsp").forward(request, response);
+				}
 	}
 
 }

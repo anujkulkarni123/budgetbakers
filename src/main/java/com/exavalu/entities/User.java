@@ -9,8 +9,18 @@ public class User {
 	private boolean status;
 	private boolean isLoggedIn;
 	
+	public User(String firstName, String lastName, String email, String password) {
+        // Initialize class fields with constructor parameters
+		this.firstName = firstName;
+		this.lastName = lastName;
+        this.emailAddress = email;
+        this.password = password;
+    }
 	
-	
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getEmailAddress() {
 		return emailAddress;
 	}
