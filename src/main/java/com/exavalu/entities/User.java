@@ -8,9 +8,17 @@ public class User {
 	private String lastName;
 	private boolean status;
 	private boolean isLoggedIn;
+	private String profilePicturePath;
 	
-	
-	
+	public String getProfilePicturePath() {
+		return profilePicturePath;
+	}
+	public void setProfilePicturePath(String profilePicturePath) {
+		this.profilePicturePath = profilePicturePath;
+	}
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 	public String getEmailAddress() {
 		return emailAddress;
 	}

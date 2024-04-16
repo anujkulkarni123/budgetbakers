@@ -3,6 +3,7 @@ package com.exavalu.servlets;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
@@ -11,7 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.exavalu.entities.Menu;
 import com.exavalu.entities.User;
 import com.exavalu.pojos.CustomMessage;
 import com.exavalu.pojos.PropertyValues;
@@ -72,10 +75,21 @@ public class Login extends HttpServlet {
 			e.printStackTrace(); // Handle the exception appropriately
 		}
 		
-		boolean user = UserService.validateUser(emailAddress, password, propertyValues);
-		
+		boolean user = UserService.validateUser(emailAddress, password, propertyValues);	
 
 		if (user) {
+			// We get the session object for the user's name, menu items that will persist the
+			// entire length of the session 
+			HttpSession session = request.getSession();
+			// We get the user and their respective menu items
+			User appUser = UserService.getUser(emailAddress, password, propertyValues);
+			
+			System.out.println("Logged in as: " + appUser.getFirstName() + " " + appUser.getLastName());
+			
+			ArrayList<Menu> menuList = UserService.getMenu(appUser.getRoleId(), propertyValues);
+			session.setAttribute("USER", appUser);
+			session.setAttribute("MENULIST", menuList);
+
 			request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
 		} else {
 			//go back to login page with error message
