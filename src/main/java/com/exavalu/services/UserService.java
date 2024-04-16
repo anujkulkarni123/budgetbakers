@@ -121,6 +121,7 @@ public class UserService {
 	                e.printStackTrace();
 	                success = false;
 	            }
+	            
 	        } else {
 	            // If either insertion fails, roll back the transaction
 	            con.rollback();
