@@ -3,6 +3,7 @@ package com.exavalu.servlets;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
@@ -11,7 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.exavalu.entities.Menu;
 import com.exavalu.entities.User;
 import com.exavalu.pojos.CustomMessage;
 import com.exavalu.pojos.PropertyValues;
@@ -38,7 +41,66 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		request.getRequestDispatcher("index.jsp").forward(request, response);
+
+		// TODO Auto-generated method stub
+		// Here I need to get all the values received
+		String emailAddress = request.getParameter("emailAddress");
+		String password = request.getParameter("password");
+
+		ServletContext context = getServletContext();
+	    Properties properties = new Properties();
+	    PropertyValues propertyValues = PropertyValues.getInstance();
+
+	    try (InputStream input = context.getResourceAsStream("/WEB-INF/config.properties")) {
+	        if (input == null) {
+	            throw new IOException("Cannot find configuration file");
+	        }
+	        properties.load(input);
+	        
+	        System.out.println(properties.getProperty("dbname"));
+	        
+	        String dbName = properties.getProperty("dbname");
+	        String url = properties.getProperty("url");
+	        String user = properties.getProperty("user");
+	        String dbpassword = properties.getProperty("password");
+	        
+	        propertyValues.setDbname(dbName);
+	        propertyValues.setPassword(dbpassword);
+	        propertyValues.setUrl(url);
+	        propertyValues.setUser(user);
+	        
+	        System.out.println("Database Name: " + propertyValues.getDbname());
+	        System.out.println("URL: " + propertyValues.getUrl());
+
+		} catch (IOException e) {
+			e.printStackTrace(); // Handle the exception appropriately
+		}
+		
+		boolean user = UserService.validateUser(emailAddress, password, propertyValues);	
+
+		if (user) {
+			// We get the session object for the user's name, menu items that will persist the
+			// entire length of the session 
+			HttpSession session = request.getSession();
+			// We get the user and their respective menu items
+			User appUser = UserService.getUser(emailAddress, password, propertyValues);
+			
+			System.out.println("Logged in as: " + appUser.getFirstName() + " " + appUser.getLastName());
+			
+			ArrayList<Menu> menuList = UserService.getMenu(appUser.getRoleId(), propertyValues);
+			session.setAttribute("USER", appUser);
+			session.setAttribute("MENULIST", menuList);
+
+			request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
+		} else {
+			//go back to login page with error message
+			CustomMessage msg = new CustomMessage();
+			msg.setMessage("Either email address or password is wrong");
+			request.setAttribute("MSG", msg);
+			request.getRequestDispatcher("index.jsp").forward(request, response);
+		}
 	}
 
 	/**

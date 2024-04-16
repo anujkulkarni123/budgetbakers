@@ -8,7 +8,9 @@ public class User {
 	private String lastName;
 	private boolean status;
 	private boolean isLoggedIn;
+	private String profilePicturePath;
 	
+
 	public User(String firstName, String lastName, String email, String password) {
         // Initialize class fields with constructor parameters
 		this.firstName = firstName;
@@ -21,6 +23,16 @@ public class User {
 		// TODO Auto-generated constructor stub
 	}
 
+
+	public String getProfilePicturePath() {
+		return profilePicturePath;
+	}
+	public void setProfilePicturePath(String profilePicturePath) {
+		this.profilePicturePath = profilePicturePath;
+	}
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 	public String getEmailAddress() {
 		return emailAddress;
 	}
