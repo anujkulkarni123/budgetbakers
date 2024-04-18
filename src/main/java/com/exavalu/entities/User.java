@@ -9,7 +9,6 @@ public class User {
 	private boolean status;
 	private boolean isLoggedIn;
 	private String profilePicturePath;
-	private int serialNumber;
 	
 
 	public User(String firstName, String lastName, String email, String password) {
@@ -76,15 +75,6 @@ public class User {
 	}
 	public void setLoggedIn(boolean isLoggedIn) {
 		this.isLoggedIn = isLoggedIn;
-	}
-
-	public void setSerialNumber(int int1) {
-		// TODO Auto-generated method stub
-		this.serialNumber = int1;
-	}
-	
-	public int getSerialNumber()	{
-		return serialNumber;
 	}
 	
 	
