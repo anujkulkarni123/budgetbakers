@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>  
-
+ 
 	<%@ include file="components/header.jsp"%>
 
 	<div class="row">

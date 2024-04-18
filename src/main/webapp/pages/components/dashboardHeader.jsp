@@ -44,7 +44,7 @@
 					<li class="nav-item"><a class="nav-link" aria-current="page"
 						href="<%=menu.getMenuLink()%>"><%=menu.getMenuName()%></a></li>
 					<%
-					}
+						}
 					}
 					%>
 				</ul></li>
@@ -69,8 +69,11 @@
 						if (menu.getMenuName().equals("Settings") || menu.getMenuName().equals("Sign Out")) {
 							System.out.println(menu.getMenuName());
 					%>
-					<li class="nav-item"><a class="nav-link" aria-current="page"
-						href="<%=menu.getMenuLink()%>"><%=menu.getMenuName()%></a></li>
+					<%-- <li class="nav-item"><a class="nav-link" aria-current="page"
+						href="<%=menu.getMenuLink()%>"><%=menu.getMenuName()%></a></li> --%>
+					<form class="nav-item" action="/<%=menu.getMenuLink()%>">
+						<button class="nav-link" aria-current="page" type="submit"><%=menu.getMenuName()%></button>
+					</form>
 					<%
 					}
 					}

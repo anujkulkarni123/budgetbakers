@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+.main-wrapper {
+	display: flex;
+	justify-content: center;
+	margin-top: 10vh;
+	width: 100%;
+}
+
+.record-container {
+	display: flex;
+	flex-direction: row;
+	width: 70%;
+}
+
+.left-container {
+	width: 25%;
+	height: 80vh;
+}
+
+.right-container {
+	width: 65%;
+}
+
+.login-button {
+	background-color: #4CAF50;
+	color: white;
+	padding: 7px 10px;
+	border: none;
+	border-radius: 20px;
+	font-size: 15px;
+	cursor: pointer;
+	width: 100%;
+}
+
+.login-button:hover {
+	background-color: #45a049;
+}
+
+.accordion-item {
+	border: none !important;
+}
+
+.accordion-button	{
+	font-size: 14px;
+}
+
+
+
+
+
+
