@@ -1,7 +1,9 @@
 package com.exavalu.servlets;
 
 import java.io.IOException;
+
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
@@ -12,7 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.exavalu.pojos.PropertyValues;
-
+import com.exavalu.services.FilterService;
+import com.exavalu.entities.FilterItem;
 /**
  * Servlet implementation class ViewRecords
  */
@@ -57,6 +60,10 @@ public class ViewRecords extends HttpServlet {
 	        
 	        System.out.println("Database Name: " + propertyValues.getDbname());
 	        System.out.println("URL: " + propertyValues.getUrl());
+	        
+	        ArrayList<FilterItem> filterItems = FilterService.getFilterItems(propertyValues);
+	        
+	        request.setAttribute("FILTERITEMS", filterItems);
 
 		} catch (IOException e) {
 			e.printStackTrace(); // Handle the exception appropriately

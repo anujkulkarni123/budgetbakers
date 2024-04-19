@@ -1,6 +1,9 @@
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="com.exavalu.entities.FilterItem"%>
 <%
     String filterType = request.getParameter("filterType");
-	String[] filterItems = {"Accounts", "Categories", "Labels", "Currencies", "Record Types", "Payment Types", "Record States"};
+	ArrayList<FilterItem> filterItems = (ArrayList<FilterItem>)request.getAttribute("FILTERITEMS");
+	
 %>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -11,7 +14,10 @@
  	<div class="card-body">
    		<h2><% out.println(filterType); %></h2>
     	
-    	<button class="login-button"> + Add </button>
+    	
+    	<% if ("Records".equals(filterType)) { %>
+		    <button class="login-button"> + Add </button>
+		<% } %>
     	
 		<br></br>
 		<div class="input-group-prepend">
@@ -24,18 +30,19 @@
 		<div class=filterContainer>
 			<div class="accordion">
 				<%
-                    for (int i = 0; i < filterItems.length; i++) {
-                        String item = filterItems[i];
+                    for (int i = 0; i < filterItems.size(); i++) {
+                    	FilterItem item = filterItems.get(i);
+                    	
                 %>
                         <div class="accordion-item" >
                             <h2 class="accordion-header" id="heading<%= i %>">
                                 <button class="accordion-button <%=(i != 0 ? "collapsed" : "")%>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= i %>" aria-expanded="<%= (i == 0 ? "true" : "false") %>" aria-controls="collapse<%= i %>">
-                                    <%= item %>
+                                    <%= item.getFilterName() %>
                                 </button>
                             </h2>
                             <div id="collapse<%= i %>" class="accordion-collapse collapse <%= (i == 0 ? "show" : "") %>" aria-labelledby="heading<%= i %>" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    Content for <%= item %>
+                                    Content for <%= item.getFilterName() %>
                                 </div>
                             </div>
                         </div>

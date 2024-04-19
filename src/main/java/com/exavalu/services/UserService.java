@@ -165,7 +165,6 @@ public class UserService {
             }
 		} catch (SQLException e) {
             e.printStackTrace();
-
         } finally {
             // Close the connection
             try {
