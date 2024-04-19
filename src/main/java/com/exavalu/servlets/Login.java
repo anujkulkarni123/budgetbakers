@@ -75,11 +75,13 @@ public class Login extends HttpServlet {
 	        System.out.println("URL: " + propertyValues.getUrl());
 
 		} catch (IOException e) {
+			System.out.println("EXCEPTION");
 			e.printStackTrace(); // Handle the exception appropriately
 		}
-		
+	    System.out.println("BEFORE USER");
 		boolean user = UserService.validateUser(emailAddress, password, propertyValues);	
-
+		System.out.println("USER");
+		System.out.println(user);
 		if (user) {
 			// We get the session object for the user's name, menu items that will persist the
 			// entire length of the session 
@@ -145,9 +147,19 @@ public class Login extends HttpServlet {
 				}
 				
 				boolean user = UserService.validateUser(emailAddress, password, propertyValues);
-				
+				System.out.println("USER");
+				System.out.println(user);
 
 				if (user) {
+					HttpSession session = request.getSession();
+					// We get the user and their respective menu items
+					User appUser = UserService.getUser(emailAddress, password, propertyValues);
+					System.out.println(appUser);
+					System.out.println("Logged in as: " + appUser.getFirstName() + " " + appUser.getLastName());
+					
+					ArrayList<Menu> menuList = UserService.getMenu(appUser.getRoleId(), propertyValues);
+					session.setAttribute("USER", appUser);
+					session.setAttribute("MENULIST", menuList);
 					request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
 				} else {
 					//go back to login page with error message

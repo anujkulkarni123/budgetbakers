@@ -1,7 +1,9 @@
 <%@ page import="com.exavalu.entities.User"%>
 <%@ page import="com.exavalu.entities.Menu"%>
 <%@ page import="java.util.ArrayList"%>
-
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet" />
 <nav class="navbar navbar-expand-lg navbar-white fixed-top">
 	<div class="container-fluid ps-4 pe-4 fw-bold">
 		<ul class="navbar-nav">

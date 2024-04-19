@@ -90,6 +90,11 @@ public class UserService {
             System.out.println("Unable to create database connection.");
             return user; // Cannot proceed without a connection
         }
+        String hashedPassword = "";
+        if (password != null) {
+	        hashedPassword = MD5Hash.encode(password);
+	        // Proceed with using hashedPassword
+	    }
        
         // Define the SQL query
         String sql = "SELECT emailAddress, firstname, lastname, roleid, password, serialNumber, status, imagePath FROM Users "
@@ -97,7 +102,7 @@ public class UserService {
      // Attempt to execute the query
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, emailAddress);
-            ps.setString(2, password);
+            ps.setString(2, hashedPassword);
             System.out.println("SQL: " + ps);
 
             // Execute the query and process the results
@@ -138,8 +143,9 @@ public class UserService {
 		 DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 	     Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 	     
-		String sql = "SELECT * FROM MENU INNER JOIN MENU_ROLE ON MENU.menuid = MENU_ROLE.menuid WHERE roleid = ? ";
+		String sql = "SELECT * FROM MENU INNER JOIN MENUROLES ON MENU.menuid = MENUROLES.menuid WHERE roleid = ? ";
 		ArrayList<Menu> menuList = new ArrayList<>();
+		System.out.println(roleId);
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setInt(1, roleId);
 			try (ResultSet rs = ps.executeQuery()) {
@@ -355,3 +361,4 @@ public class UserService {
 		}
 	}
 }
+
