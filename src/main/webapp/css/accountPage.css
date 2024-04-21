@@ -52,7 +52,7 @@
    justify-content: center;
    align-items: center;
 }
-/* Popup Content */
+
 .add-account-popup form {
    background-color: #fefefe;
    margin: auto;
@@ -65,7 +65,7 @@
    top: 50%;
    transform: translateY(-50%);
 }
-/* The Close Button */
+
 .close-btn {
    color: #aaa;
    float: right;
@@ -78,7 +78,7 @@
    text-decoration: none;
    cursor: pointer;
 }
-/* Style for the labels and inputs */
+
 .form-group {
    margin-bottom: 15px;
 }
@@ -95,7 +95,7 @@ select {
    display: inline-block;
    border: 1px solid #ccc;
    border-radius: 4px;
-   box-sizing: border-box; /* Include padding in total width and height */
+   box-sizing: border-box; 
 }
 input[type=text]:focus,
 input[type=number]:focus,
@@ -115,7 +115,7 @@ select:focus {
    cursor: pointer;
    width: 100%;
 }
-/* Add a hover effect for the submit button */
+
 .form-actions button[type=submit]:hover {
    background-color: #45a049;
 }
