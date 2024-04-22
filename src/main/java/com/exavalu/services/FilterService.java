@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 public class FilterService {
 
 	public static ArrayList<FilterItem> getFilterItems(PropertyValues propertyValues) {
+
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 
@@ -34,11 +35,16 @@ public class FilterService {
 				item.setFilterName(rs.getString("filterName"));
 				filterItems.add(item);
 			}
+			System.out.println("Array Function Success");
 			return filterItems;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			// Log or print more detailed error information
+			System.err.println("SQLState: " + e.getSQLState());
+			System.err.println("Error Code: " + e.getErrorCode());
+			System.err.println("Message: " + e.getMessage());
 			e.printStackTrace();
-			return null;
+			// Optionally, rethrow as a custom exception or handle accordingly
+			throw new RuntimeException("Database access error encountered", e);
 		} finally {
 			// Close the connection
 			try {
@@ -51,7 +57,8 @@ public class FilterService {
 		}
 	}
 
-	public static String getCategories(PropertyValues propertyValues) {
+	public static Map<String, List<String>> getCategories(PropertyValues propertyValues) {
+		
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 
@@ -78,21 +85,56 @@ public class FilterService {
 			for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
 				categories.add(new Category(entry.getKey(), entry.getValue()));
 			}
-
-			// Convert the list of categories into JSON
-			Gson gson = new Gson();
-			
-			System.out.println(gson.toJson(categories));
-			
-			return gson.toJson(categories);
+			System.out.println("Map Function Success");
+			return categoryMap;
 
 		} catch (SQLException e) {
-			// Handle exceptions properly
+			// Log or print more detailed error information
+			System.err.println("SQLState: " + e.getSQLState());
+			System.err.println("Error Code: " + e.getErrorCode());
+			System.err.println("Message: " + e.getMessage());
 			e.printStackTrace();
+			// Optionally, rethrow as a custom exception or handle accordingly
+			throw new RuntimeException("Database access error encountered", e);
+		} finally {
+			// Close the connection
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 
-		return null;
-
+	}
+	
+	public static ArrayList<FilterItem> getCurrencies(PropertyValues propertyValues)	{
+		
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		
+		ArrayList<FilterItem> currencies = new ArrayList<>();
+		
+		String sql = "SELECT currencyName FROM Currencies";
+		
+		try (PreparedStatement ps = con.prepareStatement(sql)){
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				FilterItem item = new FilterItem();
+				item.setFilterName(rs.getString("currencyName"));
+				currencies.add(item);
+			}
+			return currencies;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+		
 	}
 
 }

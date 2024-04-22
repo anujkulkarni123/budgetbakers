@@ -5,7 +5,14 @@
 	justify-content: center;
 	margin-top: 10vh;
 	width: 100%;
+	
 }
+
+.card	{
+	border: none;
+	
+}
+
 
 .record-container {
 	display: flex;
@@ -14,12 +21,13 @@
 }
 
 .left-container {
-	width: 25%;
+	width: 350px;
 	height: 80vh;
 }
 
 .right-container {
 	width: 65%;
+
 }
 
 .login-button {
@@ -37,13 +45,52 @@
 	background-color: #45a049;
 }
 
-.accordion-item {
-	border: none !important;
+#accordionExample	{
+	position: relative;
+	
+	width: 100%;
+	background: transparent;
+	
+	.accordion-item	{
+		border: none;
+		
+	}
 }
 
-.accordion-button	{
-	font-size: 14px;
+
+/* styles.css */
+
+.accordion-header {
+    font-size: 14px;
 }
+
+.accordion-button {
+    font-size: 14px;
+
+.accordion-collapse {
+    font-size: 14px;
+}
+
+.accordion-body {
+    font-size: 14px;
+}
+
+.form-check-label {
+    font-size: 14px;
+}
+
+.button-container	{
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border: 1px solid black;
+}
+
+
+
+
+
 
 
 
