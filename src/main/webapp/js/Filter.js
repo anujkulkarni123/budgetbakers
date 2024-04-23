@@ -217,7 +217,6 @@ function toggleSubcategoryCheckboxes(selectAllCheckbox, index, category) {
     });
 }
 
-
 function FilterQueryBuilder() {
     let queryString = '';
 
@@ -245,7 +244,6 @@ function FilterQueryBuilder() {
             queryString += `${encodeURIComponent(key)}=${encodeURIComponent(values)}`;
         }
     }
-
     if (queryString.length > 0) {
         queryString = `${globalData.filterType}?${queryString}`;
     }
