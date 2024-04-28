@@ -1,4 +1,4 @@
-<div id="recordPopup" style="display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4); z-index: 1050; display: flex; justify-content: center; align-items: center;">
+<div id="recordPopup" style="display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4); z-index: 1050; justify-content: center; align-items: center;">
     <div style="background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h2 style="margin: 0;">ADD RECORD</h2>
