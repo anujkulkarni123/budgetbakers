@@ -4,7 +4,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -14,10 +17,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.exavalu.entities.Card;
 import com.exavalu.entities.Menu;
 import com.exavalu.entities.User;
 import com.exavalu.pojos.CustomMessage;
 import com.exavalu.pojos.PropertyValues;
+import com.exavalu.services.CardService;
 import com.exavalu.services.UserService;
 
 /**
@@ -90,7 +95,11 @@ public class Login extends HttpServlet {
 				
 
 				if (user != null) {
-					
+					List<Card> cards = CardService.getCards(propertyValues);
+					Map<String, List<Card>> cardsByType = cards.stream()
+						    .collect(Collectors.groupingBy(Card::getType));
+					request.setAttribute("CARDS_BY_TYPE", cardsByType);
+			        request.setAttribute("CARDS", cards);
 					ArrayList<Menu> menuItems = UserService.getMenu(user.getRoleId(), propertyValues);
 					request.getSession().setAttribute("USER", user);
 					request.getSession().setAttribute("MENULIST", menuItems);

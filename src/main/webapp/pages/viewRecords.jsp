@@ -15,6 +15,7 @@
 <body>
 	<%@ include file="components/dashboardHeader.jsp"%>
 	
+	
 	<div class="main-wrapper">
 		<div class="record-container">
 			<div class="left-container">

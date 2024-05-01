@@ -2,7 +2,7 @@
 <%@ page import="com.exavalu.entities.Menu"%>
 <%@ page import="java.util.ArrayList"%>
 
-<nav class="navbar navbar-expand-lg navbar-white fixed-top">
+<nav class="navbar navbar-expand-lg navbar-white fixed-top" style="border-bottom: 1px solid #ccc;">
 	<div class="container-fluid ps-4 pe-4 fw-bold">
 		<ul class="navbar-nav">
 			<li class="nav-item"><a class="navbar-brand" href="#"> <svg
@@ -36,7 +36,7 @@
 
 			<li class="nav-item"><ul class="navbar-nav">
 					<li class="nav-item"><a class="nav-link" aria-current="page"
-						href="#">Home</a></li>
+						href="ViewDashboard">Home</a></li>
 					<%
 					for (Menu menu : menuList) {
 						if (!menu.getMenuName().equals("Settings") && !menu.getMenuName().equals("Sign Out")) {
