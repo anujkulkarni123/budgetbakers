@@ -39,7 +39,22 @@
 		<div class="container mt-4">
 			<div class="row" id="cardRow">
 				<!-- This row will contain all the cards -->
-				 
+				  <%
+				    List<Card> cards = (List<Card>) request.getAttribute("CARDS");
+				    for (Card card : cards) {
+				    %>
+				        <div class="col-lg-4 col-md-6">
+				            <div class="card m-2" id="card"> <!-- Ensuring unique ID -->
+				                <h5 class="card-title"><%=card.getName()%></h5>
+				                <hr>
+				                <div class="card-body">
+				                    <%=card.getJson()%>
+				                </div>
+				            </div>
+				        </div>
+				    <%
+				    }
+				    %>
 				<div class="col-12">
 					<!-- Add Card Placeholder -->
 					<div class="card m-2 add-card" id="addCard">
