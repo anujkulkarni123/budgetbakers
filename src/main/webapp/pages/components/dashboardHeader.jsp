@@ -45,6 +45,8 @@
         popup.style.display = 'none';
         showSection('expense');  
     }
+    
+ 
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-white fixed-top">

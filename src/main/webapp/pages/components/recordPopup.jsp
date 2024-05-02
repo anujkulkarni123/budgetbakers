@@ -21,35 +21,35 @@ ArrayList<SubCategory> subCategoryList = (ArrayList<SubCategory>) request.getAtt
 Map<Integer, String> accountTypeMapRecord = (Map<Integer, String>) request.getAttribute("accountTypeMap");
 Map<Integer, String> currencyMapRecord = (Map<Integer, String>) request.getAttribute("currencyMap");
 %>
+
 <script>
 function updateSubCategories(categoryId) {
-    console.log("Updating SubCategories for Category ID:", categoryId); // Add this to check if the function is called
     var subCategorySelect = document.getElementById('subCategory');
-    subCategorySelect.innerHTML = '';
+    subCategorySelect.innerHTML = '';  
     var categoryIdInt = parseInt(categoryId);
 
-    <%for (SubCategory sub : subCategoryList) {%>
+    <% for (SubCategory sub : subCategoryList) { %>
         if (<%=sub.getCategoryId()%> === categoryIdInt) {
             var option = document.createElement('option');
             option.value = '<%=sub.getSubCategoryId()%>';
-            option.text = '<%=sub.getSubCategoryName()%>
-	';
-			subCategorySelect.appendChild(option);
-		}
-<%}%>
-	}
+            option.text = '<%=sub.getSubCategoryName()%>';
+            subCategorySelect.appendChild(option);
+        }
+    <% } %>
+}
 </script>
+
 <style>
-/* Style for specific input fields */
 .styled-input {
 	border: 1px solid #ccc;
 	border-radius: 5px;
-	height: 30px; /* Adjust height as needed */
-	padding: 5px; /* Add padding for better visual */
-	font-size: smaller; /* Adjust font size */
-	width: 100%; /* Fill the width of the container */
+	height: 30px;
+	padding: 5px; 
+	font-size: smaller; 
+	width: 100%; 
 }
 </style>
+
 <div id="recordPopup"
 	style="display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4); z-index: 1050; justify-content: center; align-items: center;">
 	<div
