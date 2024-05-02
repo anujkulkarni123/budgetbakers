@@ -23,8 +23,9 @@ Map<Integer, String> currencyMapRecord = (Map<Integer, String>) request.getAttri
 %>
 <script>
 function updateSubCategories(categoryId) {
+    console.log("Updating SubCategories for Category ID:", categoryId); // Add this to check if the function is called
     var subCategorySelect = document.getElementById('subCategory');
-    subCategorySelect.innerHTML = '';  
+    subCategorySelect.innerHTML = '';
     var categoryIdInt = parseInt(categoryId);
 
     <%for (SubCategory sub : subCategoryList) {%>
@@ -37,8 +38,18 @@ function updateSubCategories(categoryId) {
 		}
 <%}%>
 	}
-	
 </script>
+<style>
+/* Style for specific input fields */
+.styled-input {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	height: 30px; /* Adjust height as needed */
+	padding: 5px; /* Add padding for better visual */
+	font-size: smaller; /* Adjust font size */
+	width: 100%; /* Fill the width of the container */
+}
+</style>
 <div id="recordPopup"
 	style="display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4); z-index: 1050; justify-content: center; align-items: center;">
 	<div
@@ -66,13 +77,12 @@ function updateSubCategories(categoryId) {
 							onclick="showSection('transfer')"
 							style="flex: 1; border: solid white 1px; background-color: rgb(77, 182, 172); color: white; padding: 5px 10px; border-radius: 0 5px 5px 0;">Transfer</button>
 					</div>
-
 					<div id="expense" class="content"
 						style="display: block; color: white;">
 						<div>
 							<label for="expenseAccount"
 								style="display: block; font-size: smaller;">Account:</label> <select
-								id="expenseAccount" name="expenseAccount">
+								id="expenseAccount" name="expenseAccount" class="styled-input">
 								<%
 								for (Account account : accountsRecord) {
 								%>
@@ -86,12 +96,14 @@ function updateSubCategories(categoryId) {
 							<div style="flex: 1; margin-right: 10px;">
 								<label for="expenseAmount"
 									style="display: block; font-size: smaller;">Amount:</label> <input
-									type="number" id="expenseAmount" name="expenseAmount" required>
+									type="number" id="expenseAmount" name="expenseAmount" required
+									class="styled-input">
 							</div>
 							<div style="flex: 1;">
 								<label for="expenseCurrency"
 									style="display: block; font-size: smaller;">Currency:</label> <select
-									id="expenseCurrency" name="expenseCurrency">
+									id="expenseCurrency" name="expenseCurrency"
+									class="styled-input">
 									<%
 									for (Currency currency : currencyListRecord) {
 									%>
@@ -109,7 +121,7 @@ function updateSubCategories(categoryId) {
 						<div>
 							<label for="incomeAccount"
 								style="display: block; font-size: smaller;">Account:</label> <select
-								id="incomeAccount" name="incomeAccount">
+								id="incomeAccount" name="incomeAccount" class="styled-input">
 								<%
 								for (Account account : accountsRecord) {
 								%>
@@ -123,12 +135,13 @@ function updateSubCategories(categoryId) {
 							<div style="flex: 1; margin-right: 10px;">
 								<label for="incomeAmount"
 									style="display: block; font-size: smaller;">Amount:</label> <input
-									type="number" id="incomeAmount" name="incomeAmount" required>
+									type="number" id="incomeAmount" name="incomeAmount" required
+									class="styled-input">
 							</div>
 							<div style="flex: 1;">
 								<label for="incomeCurrency"
 									style="display: block; font-size: smaller;">Currency:</label> <select
-									id="incomeCurrency" name="incomeCurrency">
+									id="incomeCurrency" name="incomeCurrency" class="styled-input">
 									<%
 									for (Currency currency : currencyListRecord) {
 									%>
@@ -148,7 +161,7 @@ function updateSubCategories(categoryId) {
 								<label for="transferFromAccount"
 									style="display: block; font-size: smaller;">From
 									Account:</label> <select id="transferFromAccount"
-									name="transferFromAccount">
+									name="transferFromAccount" class="styled-input">
 									<%
 									for (Account account : accountsRecord) {
 									%>
@@ -161,7 +174,8 @@ function updateSubCategories(categoryId) {
 							<div style="flex: 1;">
 								<label for="transferToAccount"
 									style="display: block; font-size: smaller;">To Account:</label>
-								<select id="transferToAccount" name="transferToAccount">
+								<select id="transferToAccount" name="transferToAccount"
+									class="styled-input">
 									<%
 									for (Account account : accountsRecord) {
 									%>
@@ -177,13 +191,13 @@ function updateSubCategories(categoryId) {
 								<label for="transferAmount"
 									style="display: block; font-size: smaller;">Amount:</label> <input
 									type="number" id="transferAmount" name="transferAmount"
-									required>
+									required class="styled-input">
 							</div>
-							<!-- Assuming a single currency field is sufficient for transfer -->
 							<div style="flex: 1;">
 								<label for="transferCurrency"
 									style="display: block; font-size: smaller;">Currency:</label> <select
-									id="transferCurrency" name="transferCurrency">
+									id="transferCurrency" name="transferCurrency"
+									class="styled-input">
 									<%
 									for (Currency currency : currencyListRecord) {
 									%>
@@ -195,6 +209,7 @@ function updateSubCategories(categoryId) {
 							</div>
 						</div>
 					</div>
+
 
 				</div>
 				<div style="padding: 20px; padding-right: 30px; padding-left: 30px;">
