@@ -52,9 +52,10 @@ function updateSubCategories(categoryId) {
 		<div style="display: flex; height: 80%;">
 			<div
 				style="border-right: 1px solid #ccc; border-top: 1px solid #ccc;">
-				<div style="background-color: rgb(77, 182, 172); padding-right: 10%; padding-left: 10%; padding-top: 5%; padding-bottom: 5%; max-height: 500px; overflow: auto; min-width: 700px;">
+				<div
+					style="background-color: rgb(77, 182, 172); padding-right: 10%; padding-left: 10%; padding-top: 5%; padding-bottom: 5%; max-height: 500px; overflow: auto; min-width: 700px;">
 
-					<div style="margin-bottom: 10px; display: flex; ">
+					<div style="margin-bottom: 10px; display: flex;">
 						<button id="btn-expense" class="section-button"
 							onclick="showSection('expense')"
 							style="flex: 1; border: solid white 1px; background-color: #fefefe; color: rgb(77, 182, 172); padding: 5px 10px; border-radius: 5px 0 0 5px;">Expense</button>
@@ -66,90 +67,137 @@ function updateSubCategories(categoryId) {
 							style="flex: 1; border: solid white 1px; background-color: rgb(77, 182, 172); color: white; padding: 5px 10px; border-radius: 0 5px 5px 0;">Transfer</button>
 					</div>
 
-
-					<div id="expense" class="content" style="display: block;">
+					<div id="expense" class="content"
+						style="display: block; color: white;">
 						<div>
-						<label for="expenseAccount">Account:</label> <select
-							id="expenseAccount" name="expenseAccount">
-							<%
-							for (Account account : accountsRecord) {
-							%>
-							<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
-							<%
-							}
-							%>
-						</select>
-						</div> <label for="expenseAmount">Amount:</label> <input type="number"
-							id="expenseAmount" name="expenseAmount" required
-							style="margin-right: 10px;"> <label for="expenseCurrency">Currency:</label>
-						<select id="expenseCurrency" name="expenseCurrency">
-							<%
-							for (Currency currency : currencyListRecord) {
-							%>
-							<option value="<%=currency.getId()%>"><%=currency.getCurrencyName()%></option>
-							<%
-							}
-							%>
-						</select>
+							<label for="expenseAccount"
+								style="display: block; font-size: smaller;">Account:</label> <select
+								id="expenseAccount" name="expenseAccount">
+								<%
+								for (Account account : accountsRecord) {
+								%>
+								<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
+								<%
+								}
+								%>
+							</select>
+						</div>
+						<div style="display: flex;">
+							<div style="flex: 1; margin-right: 10px;">
+								<label for="expenseAmount"
+									style="display: block; font-size: smaller;">Amount:</label> <input
+									type="number" id="expenseAmount" name="expenseAmount" required>
+							</div>
+							<div style="flex: 1;">
+								<label for="expenseCurrency"
+									style="display: block; font-size: smaller;">Currency:</label> <select
+									id="expenseCurrency" name="expenseCurrency">
+									<%
+									for (Currency currency : currencyListRecord) {
+									%>
+									<option value="<%=currency.getId()%>"><%=currency.getCurrencyName()%></option>
+									<%
+									}
+									%>
+								</select>
+							</div>
+						</div>
 					</div>
 
-
-					<div id="income" class="content" style="display: none;">
-
-						<label for="incomeAccount">Account:</label> <select
-							id="incomeAccount" name="incomeAccount">
-							<%
-							for (Account account : accountsRecord) {
-							%>
-							<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
-							<%
-							}
-							%>
-						</select> <label for="incomeAmount">Amount:</label> <input type="number"
-							id="incomeAmount" name="incomeAmount" required
-							style="margin-right: 10px;"> <label for="incomeCurrency">Currency:</label>
-						<select id="incomeCurrency" name="incomeCurrency">
-							<%
-							for (Currency currency : currencyListRecord) {
-							%>
-							<option value="<%=currency.getId()%>"><%=currency.getCurrencyName()%></option>
-							<%
-							}
-							%>
-						</select>
-
+					<div id="income" class="content"
+						style="display: none; color: white;">
+						<div>
+							<label for="incomeAccount"
+								style="display: block; font-size: smaller;">Account:</label> <select
+								id="incomeAccount" name="incomeAccount">
+								<%
+								for (Account account : accountsRecord) {
+								%>
+								<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
+								<%
+								}
+								%>
+							</select>
+						</div>
+						<div style="display: flex;">
+							<div style="flex: 1; margin-right: 10px;">
+								<label for="incomeAmount"
+									style="display: block; font-size: smaller;">Amount:</label> <input
+									type="number" id="incomeAmount" name="incomeAmount" required>
+							</div>
+							<div style="flex: 1;">
+								<label for="incomeCurrency"
+									style="display: block; font-size: smaller;">Currency:</label> <select
+									id="incomeCurrency" name="incomeCurrency">
+									<%
+									for (Currency currency : currencyListRecord) {
+									%>
+									<option value="<%=currency.getId()%>"><%=currency.getCurrencyName()%></option>
+									<%
+									}
+									%>
+								</select>
+							</div>
+						</div>
 					</div>
 
-
-
-					<div id="transfer" class="content" style="display: none;">
-
-						<label for="transferFromAccount">From Account:</label> <select
-							id="transferFromAccount" name="transferFromAccount">
-							<%
-							for (Account account : accountsRecord) {
-							%>
-							<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
-							<%
-							}
-							%>
-						</select> <label for="transferToAccount">To Account:</label> <select
-							id="transferToAccount" name="transferToAccount">
-							<%
-							for (Account account : accountsRecord) {
-							%>
-							<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
-							<%
-							}
-							%>
-						</select> <label for="transferAmount">Amount:</label> <input type="number"
-							id="transferAmount" name="transferAmount" required>
-
+					<div id="transfer" class="content"
+						style="display: none; color: white;">
+						<div style="display: flex;">
+							<div style="flex: 1; margin-right: 10px;">
+								<label for="transferFromAccount"
+									style="display: block; font-size: smaller;">From
+									Account:</label> <select id="transferFromAccount"
+									name="transferFromAccount">
+									<%
+									for (Account account : accountsRecord) {
+									%>
+									<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
+									<%
+									}
+									%>
+								</select>
+							</div>
+							<div style="flex: 1;">
+								<label for="transferToAccount"
+									style="display: block; font-size: smaller;">To Account:</label>
+								<select id="transferToAccount" name="transferToAccount">
+									<%
+									for (Account account : accountsRecord) {
+									%>
+									<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
+									<%
+									}
+									%>
+								</select>
+							</div>
+						</div>
+						<div style="display: flex;">
+							<div style="flex: 1; margin-right: 10px;">
+								<label for="transferAmount"
+									style="display: block; font-size: smaller;">Amount:</label> <input
+									type="number" id="transferAmount" name="transferAmount"
+									required>
+							</div>
+							<!-- Assuming a single currency field is sufficient for transfer -->
+							<div style="flex: 1;">
+								<label for="transferCurrency"
+									style="display: block; font-size: smaller;">Currency:</label> <select
+									id="transferCurrency" name="transferCurrency">
+									<%
+									for (Currency currency : currencyListRecord) {
+									%>
+									<option value="<%=currency.getId()%>"><%=currency.getCurrencyName()%></option>
+									<%
+									}
+									%>
+								</select>
+							</div>
+						</div>
 					</div>
 
 				</div>
 				<div style="padding: 20px; padding-right: 30px; padding-left: 30px;">
-					<!-- Category and Subcategory in one row -->
 					<div
 						style="display: flex; justify-content: space-between; margin-bottom: 10px;">
 						<div style="margin-right: 10px; flex: 1;">
@@ -175,7 +223,6 @@ function updateSubCategories(categoryId) {
 						</div>
 					</div>
 
-					<!-- Date and Time in one row -->
 					<div
 						style="display: flex; justify-content: space-between; margin-bottom: 10px;">
 						<div style="margin-right: 10px; flex: 1;">
