@@ -14,10 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.exavalu.entities.Account;
+import com.exavalu.entities.AccountType;
+import com.exavalu.entities.Currency;
 import com.exavalu.entities.Menu;
 import com.exavalu.entities.User;
 import com.exavalu.pojos.CustomMessage;
 import com.exavalu.pojos.PropertyValues;
+import com.exavalu.services.AccountService;
+import com.exavalu.services.CurrencyService;
 import com.exavalu.services.UserService;
 
 /**
@@ -43,7 +48,7 @@ public class Login extends HttpServlet {
 			throws ServletException, IOException {
 
 		request.getRequestDispatcher("index.jsp").forward(request, response);
-
+		
 		// TODO Auto-generated method stub
 		// Here I need to get all the values received
 		String emailAddress = request.getParameter("emailAddress");
@@ -89,12 +94,25 @@ public class Login extends HttpServlet {
 			// We get the user and their respective menu items
 			User appUser = UserService.getUser(emailAddress, password, propertyValues);
 			
-			System.out.println("Logged in as: " + appUser.getFirstName() + " " + appUser.getLastName());
+			System.out.println("Logged in as: " + appUser.getFirstName() + " " + appUser.getLastName() + " " + appUser.getEmailAddress() + " END2");
 			
 			ArrayList<Menu> menuList = UserService.getMenu(appUser.getRoleId(), propertyValues);
 			session.setAttribute("USER", appUser);
 			session.setAttribute("MENULIST", menuList);
+			
+			ArrayList<AccountType> accountTypes = AccountService.getAccountTypes(propertyValues);
+			ArrayList<Account> accounts = AccountService.getAccounts(appUser.getEmailAddress(), propertyValues);
+			ArrayList<Currency> currencies = CurrencyService.getCurrencies(propertyValues);
+			
+			System.out.println(accountTypes);
+			System.out.println(accounts);
+			System.out.println(currencies);
+			
+			session.setAttribute("ACCOUNTTYPES", accountTypes);
+			session.setAttribute("ACCOUNTS", accounts);
+			session.setAttribute("CURRENCIES", currencies);
 
+			
 			request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
 		} else {
 			//go back to login page with error message
@@ -160,6 +178,20 @@ public class Login extends HttpServlet {
 					ArrayList<Menu> menuList = UserService.getMenu(appUser.getRoleId(), propertyValues);
 					session.setAttribute("USER", appUser);
 					session.setAttribute("MENULIST", menuList);
+					
+					ArrayList<AccountType> accountTypes = AccountService.getAccountTypes(propertyValues);
+					ArrayList<Account> accounts = AccountService.getAccounts(appUser.getEmailAddress(), propertyValues);
+					ArrayList<Currency> currencies = CurrencyService.getCurrencies(propertyValues);
+					
+					System.out.println(accountTypes);
+					System.out.println(accounts);
+					System.out.println(currencies);
+					
+					session.setAttribute("ACCOUNTTYPES", accountTypes);
+					session.setAttribute("ACCOUNTS", accounts);
+					session.setAttribute("CURRENCIES", currencies);
+
+					
 					request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
 				} else {
 					//go back to login page with error message

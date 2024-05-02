@@ -26,7 +26,7 @@
 	}
 </script>
 <body style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
-	<%@ include file="components/dashboardHeader.jsp"%>
+	
 	<%
 	User currentUser = (User) session.getAttribute("USER");
 	System.out.println("currentUser");
@@ -45,7 +45,17 @@
 	for (Currency currency : currencyList) {
 		currencyMap.put(currency.getId(), currency.getCurrencyName());
 	}
+	System.out.println("CHECKER");
+	System.out.println(accounts);
+	System.out.println(accountTypeList);
+	request.setAttribute("accounts", accounts);
+    request.setAttribute("accountTypeList", accountTypeList);
+    request.setAttribute("currencyList", currencyList);
+    request.setAttribute("accountTypeMap", accountTypeMap);
+    request.setAttribute("currencyMap", currencyMap);
+    
 	%>
+	<jsp:include page="components/dashboardHeader.jsp" />
 	<div
 		style="display: flex; justify-content: space-between; padding-top: 5rem; background-color: #eff0f2; min-height: 100rem; height: 100%;">
 		<div

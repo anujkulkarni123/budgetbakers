@@ -1,7 +1,14 @@
 <%@ page import="com.exavalu.entities.User"%>
 <%@ page import="com.exavalu.entities.Menu"%>
 <%@ page import="java.util.ArrayList"%>
-<%@ include file="recordPopup.jsp" %>
+<%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.Map"%>
+<%@ page import="com.exavalu.entities.Account"%>
+<%@ page import="com.exavalu.entities.AccountType"%>
+<%@ page import="com.exavalu.entities.Currency"%>
+<%@ page import="com.exavalu.entities.User"%>
+
+
 <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
     rel="stylesheet" />
@@ -22,6 +29,8 @@
     }
 </script>
 <nav class="navbar navbar-expand-lg navbar-white fixed-top">
+<jsp:include page="/pages/components/recordPopup.jsp" />
+
     <div class="container-fluid ps-4 pe-4 fw-bold">
         <ul class="navbar-nav">
             <li class="nav-item"><a class="navbar-brand" href="#"> <svg
@@ -48,16 +57,19 @@
                     Dashboard
             </a></li>
             <%
-            // retrieve all of our parameters from login servlet
-            User user = (User) session.getAttribute("USER");
-            ArrayList<Menu> menuList = (ArrayList<Menu>) session.getAttribute("MENULIST");
+          
+            User currentUserHeader = (User) session.getAttribute("USER");
+            ArrayList<Menu> menuListHeader = (ArrayList<Menu>) session.getAttribute("MENULIST");
+
+
+            
             %>
 
             <li class="nav-item"><ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" aria-current="page"
                         href="#">Home</a></li>
                     <%
-                    for (Menu menu : menuList) {
+                    for (Menu menu : menuListHeader) {
                         if (!menu.getMenuName().equals("Settings") && !menu.getMenuName().equals("Sign Out")) {
                     %>
                     <li class="nav-item"><a class="nav-link" aria-current="page"
@@ -78,12 +90,12 @@
                 data-bs-toggle="dropdown" aria-current="page" href="#"> <img
                     style="width: 46px;"
                     class="img-thumbnail bg-transparent border-0 rounded-circle pt-0 pb-0"
-                    src="${pageContext.request.contextPath}/<%=user.getProfilePicturePath()%>"
-                    > <%=user.getFirstName() + " " + user.getLastName()%>
+                    src="${pageContext.request.contextPath}/<%=currentUserHeader.getProfilePicturePath()%>"
+                    > <%=currentUserHeader.getFirstName() + " " + currentUserHeader.getLastName()%>
             </a>
                 <ul class="dropdown-menu">
                     <%
-                    for (Menu menu : menuList) {
+                    for (Menu menu : menuListHeader) {
                         if (menu.getMenuName().equals("Settings") || menu.getMenuName().equals("Sign Out")) {
                             System.out.println(menu.getMenuName());
                     %>
@@ -97,4 +109,5 @@
         </ul>
 
     </div>
+    
 </nav>
