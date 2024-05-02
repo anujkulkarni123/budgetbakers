@@ -52,9 +52,9 @@ function updateSubCategories(categoryId) {
 		<div style="display: flex; height: 80%;">
 			<div
 				style="border-right: 1px solid #ccc; border-top: 1px solid #ccc;">
-				<div
-					style="background-color: rgb(77, 182, 172); padding-right: 10%; padding-left: 10%; padding-top: 5%; padding-bottom: 5%;">
-					<div style="margin-bottom: 10px; display: flex;">
+				<div style="background-color: rgb(77, 182, 172); padding-right: 10%; padding-left: 10%; padding-top: 5%; padding-bottom: 5%; max-height: 500px; overflow: auto; min-width: 700px;">
+
+					<div style="margin-bottom: 10px; display: flex; ">
 						<button id="btn-expense" class="section-button"
 							onclick="showSection('expense')"
 							style="flex: 1; border: solid white 1px; background-color: #fefefe; color: rgb(77, 182, 172); padding: 5px 10px; border-radius: 5px 0 0 5px;">Expense</button>
@@ -67,27 +67,22 @@ function updateSubCategories(categoryId) {
 					</div>
 
 
-					<!-- Expense Section Always Visible Initially -->
 					<div id="expense" class="content" style="display: block;">
+						<div>
 						<label for="expenseAccount">Account:</label> <select
 							id="expenseAccount" name="expenseAccount">
 							<%
 							for (Account account : accountsRecord) {
 							%>
-							<option value="<%=account.getAccountId()%>">
-								<%=account.getName()%> -
-								<%=accountTypeMapRecord.get(account.getAccountTypeId())%> -
-								Balance:
-								<%=account.getAccountBalance()%>
-								<%=currencyMapRecord.get(account.getCurrencyId())%>
-							</option>
+							<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
 							<%
 							}
 							%>
-						</select> <label for="expenseAmount">Amount:</label> <input type="number"
-							id="expenseAmount" name="expenseAmount" required> <label
-							for="expenseCurrency">Currency:</label> <select
-							id="expenseCurrency" name="expenseCurrency">
+						</select>
+						</div> <label for="expenseAmount">Amount:</label> <input type="number"
+							id="expenseAmount" name="expenseAmount" required
+							style="margin-right: 10px;"> <label for="expenseCurrency">Currency:</label>
+						<select id="expenseCurrency" name="expenseCurrency">
 							<%
 							for (Currency currency : currencyListRecord) {
 							%>
@@ -98,26 +93,22 @@ function updateSubCategories(categoryId) {
 						</select>
 					</div>
 
+
 					<div id="income" class="content" style="display: none;">
+
 						<label for="incomeAccount">Account:</label> <select
 							id="incomeAccount" name="incomeAccount">
 							<%
 							for (Account account : accountsRecord) {
 							%>
-							<option value="<%=account.getAccountId()%>">
-								<%=account.getName()%> -
-								<%=accountTypeMapRecord.get(account.getAccountTypeId())%> -
-								Balance:
-								<%=account.getAccountBalance()%>
-								<%=currencyMapRecord.get(account.getCurrencyId())%>
-							</option>
+							<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
 							<%
 							}
 							%>
-						</select> </select> <label for="incomeAmount">Amount:</label> <input type="number"
-							id="incomeAmount" name="incomeAmount" required> <label
-							for="incomeCurrency">Currency:</label> <select
-							id="incomeCurrency" name="incomeCurrency">
+						</select> <label for="incomeAmount">Amount:</label> <input type="number"
+							id="incomeAmount" name="incomeAmount" required
+							style="margin-right: 10px;"> <label for="incomeCurrency">Currency:</label>
+						<select id="incomeCurrency" name="incomeCurrency">
 							<%
 							for (Currency currency : currencyListRecord) {
 							%>
@@ -126,22 +117,19 @@ function updateSubCategories(categoryId) {
 							}
 							%>
 						</select>
+
 					</div>
 
 
+
 					<div id="transfer" class="content" style="display: none;">
+
 						<label for="transferFromAccount">From Account:</label> <select
 							id="transferFromAccount" name="transferFromAccount">
 							<%
 							for (Account account : accountsRecord) {
 							%>
-							<option value="<%=account.getAccountId()%>">
-								<%=account.getName()%> -
-								<%=accountTypeMapRecord.get(account.getAccountTypeId())%> -
-								Balance:
-								<%=account.getAccountBalance()%>
-								<%=currencyMapRecord.get(account.getCurrencyId())%>
-							</option>
+							<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
 							<%
 							}
 							%>
@@ -150,19 +138,15 @@ function updateSubCategories(categoryId) {
 							<%
 							for (Account account : accountsRecord) {
 							%>
-							<option value="<%=account.getAccountId()%>">
-								<%=account.getName()%> -
-								<%=accountTypeMapRecord.get(account.getAccountTypeId())%> -
-								Balance:
-								<%=account.getAccountBalance()%>
-								<%=currencyMapRecord.get(account.getCurrencyId())%>
-							</option>
+							<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
 							<%
 							}
 							%>
-						</select><label for="transferAmount">Amount:</label> <input type="number"
+						</select> <label for="transferAmount">Amount:</label> <input type="number"
 							id="transferAmount" name="transferAmount" required>
+
 					</div>
+
 				</div>
 				<div style="padding: 20px; padding-right: 30px; padding-left: 30px;">
 					<!-- Category and Subcategory in one row -->
