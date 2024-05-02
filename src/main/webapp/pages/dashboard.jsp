@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.Map"%>
+<%@ page import="com.exavalu.entities.Account"%>
+<%@ page import="com.exavalu.entities.AccountType"%>
+<%@ page import="com.exavalu.entities.Currency"%>
+<%@ page import="com.exavalu.entities.User"%>
+<%@ page import="com.exavalu.entities.Category"%>
+<%@ page import="com.exavalu.entities.SubCategory"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +26,11 @@
 	ArrayList<Account> accounts = (ArrayList<Account>) session.getAttribute("ACCOUNTS");
 	ArrayList<AccountType> accountTypeList = (ArrayList<AccountType>) session.getAttribute("ACCOUNTTYPES");
 	ArrayList<Currency> currencyList = (ArrayList<Currency>) session.getAttribute("CURRENCIES");
-
+	ArrayList<Category> categoryList = (ArrayList<Category>) session.getAttribute("CATEGORIES");
+	ArrayList<SubCategory> SubCategoryList = (ArrayList<SubCategory>) session.getAttribute("SUBCATEGORIES");
+	System.out.println("category List");
+	System.out.println(categoryList);
+	System.out.println(SubCategoryList);
 	Map<Integer, String> accountTypeMap = new HashMap<>();
 	Map<Integer, String> currencyMap = new HashMap<>();
 
@@ -36,6 +49,8 @@
     request.setAttribute("currencyList", currencyList);
     request.setAttribute("accountTypeMap", accountTypeMap);
     request.setAttribute("currencyMap", currencyMap);
+    request.setAttribute("categoryList", categoryList);
+    request.setAttribute("SubCategoryList", SubCategoryList);
     
 	%>
 	<%@ include file="components/dashboardHeader.jsp"%>

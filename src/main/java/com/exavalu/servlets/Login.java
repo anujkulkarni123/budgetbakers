@@ -19,9 +19,12 @@ import com.exavalu.entities.AccountType;
 import com.exavalu.entities.Currency;
 import com.exavalu.entities.Menu;
 import com.exavalu.entities.User;
+import com.exavalu.entities.Category;
+import com.exavalu.entities.SubCategory;
 import com.exavalu.pojos.CustomMessage;
 import com.exavalu.pojos.PropertyValues;
 import com.exavalu.services.AccountService;
+import com.exavalu.services.CategoryService;
 import com.exavalu.services.CurrencyService;
 import com.exavalu.services.UserService;
 
@@ -49,78 +52,6 @@ public class Login extends HttpServlet {
 
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 		
-		// TODO Auto-generated method stub
-		// Here I need to get all the values received
-		String emailAddress = request.getParameter("emailAddress");
-		String password = request.getParameter("password");
-
-		ServletContext context = getServletContext();
-	    Properties properties = new Properties();
-	    PropertyValues propertyValues = PropertyValues.getInstance();
-
-	    try (InputStream input = context.getResourceAsStream("/WEB-INF/config.properties")) {
-	        if (input == null) {
-	            throw new IOException("Cannot find configuration file");
-	        }
-	        properties.load(input);
-	        
-	        System.out.println(properties.getProperty("dbname"));
-	        
-	        String dbName = properties.getProperty("dbname");
-	        String url = properties.getProperty("url");
-	        String user = properties.getProperty("user");
-	        String dbpassword = properties.getProperty("password");
-	        
-	        propertyValues.setDbname(dbName);
-	        propertyValues.setPassword(dbpassword);
-	        propertyValues.setUrl(url);
-	        propertyValues.setUser(user);
-	        
-	        System.out.println("Database Name: " + propertyValues.getDbname());
-	        System.out.println("URL: " + propertyValues.getUrl());
-
-		} catch (IOException e) {
-			System.out.println("EXCEPTION");
-			e.printStackTrace(); // Handle the exception appropriately
-		}
-	    System.out.println("BEFORE USER");
-		boolean user = UserService.validateUser(emailAddress, password, propertyValues);	
-		System.out.println("USER");
-		System.out.println(user);
-		if (user) {
-			// We get the session object for the user's name, menu items that will persist the
-			// entire length of the session 
-			HttpSession session = request.getSession();
-			// We get the user and their respective menu items
-			User appUser = UserService.getUser(emailAddress, password, propertyValues);
-			
-			System.out.println("Logged in as: " + appUser.getFirstName() + " " + appUser.getLastName() + " " + appUser.getEmailAddress() + " END2");
-			
-			ArrayList<Menu> menuList = UserService.getMenu(appUser.getRoleId(), propertyValues);
-			session.setAttribute("USER", appUser);
-			session.setAttribute("MENULIST", menuList);
-			
-			ArrayList<AccountType> accountTypes = AccountService.getAccountTypes(propertyValues);
-			ArrayList<Account> accounts = AccountService.getAccounts(appUser.getEmailAddress(), propertyValues);
-			ArrayList<Currency> currencies = CurrencyService.getCurrencies(propertyValues);
-			
-			System.out.println(accountTypes);
-			System.out.println(accounts);
-			System.out.println(currencies);
-			
-			session.setAttribute("ACCOUNTTYPES", accountTypes);
-			session.setAttribute("ACCOUNTS", accounts);
-			session.setAttribute("CURRENCIES", currencies);
-
-			
-			request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
-		} else {
-			//go back to login page with error message
-			CustomMessage msg = new CustomMessage();
-			msg.setMessage("Either email address or password is wrong");
-			request.setAttribute("MSG", msg);
-			request.getRequestDispatcher("index.jsp").forward(request, response);
-		}
 	}
 
 	/**
@@ -191,6 +122,15 @@ public class Login extends HttpServlet {
 					session.setAttribute("ACCOUNTS", accounts);
 					session.setAttribute("CURRENCIES", currencies);
 
+					ArrayList<Category> categoryList = CategoryService.getCategories(propertyValues);
+					ArrayList<SubCategory> subCategoryList = CategoryService.getSubCategories(propertyValues);
+					System.out.println("CATGEGORIES");
+					System.out.println(categoryList);
+					System.out.println(subCategoryList);
+					
+					session.setAttribute("CATEGORIES", categoryList);
+					session.setAttribute("SUBCATEGORIES", subCategoryList);
+					
 					
 					request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
 				} else {

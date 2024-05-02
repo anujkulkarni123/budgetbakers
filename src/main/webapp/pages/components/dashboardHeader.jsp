@@ -7,6 +7,8 @@
 <%@ page import="com.exavalu.entities.AccountType"%>
 <%@ page import="com.exavalu.entities.Currency"%>
 <%@ page import="com.exavalu.entities.User"%>
+<%@ page import="com.exavalu.entities.Category"%>
+<%@ page import="com.exavalu.entities.SubCategory"%>
 
 
 <link

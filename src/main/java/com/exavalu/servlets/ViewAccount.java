@@ -15,10 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.exavalu.entities.Account;
 import com.exavalu.entities.AccountType;
+import com.exavalu.entities.Category;
 import com.exavalu.entities.Currency;
+import com.exavalu.entities.SubCategory;
 import com.exavalu.entities.User;
 import com.exavalu.pojos.PropertyValues;
 import com.exavalu.services.AccountService;
+import com.exavalu.services.CategoryService;
 import com.exavalu.services.CurrencyService;
 import com.exavalu.services.UserService;
 
@@ -77,6 +80,13 @@ public class ViewAccount extends HttpServlet {
 			request.setAttribute("ACCOUNTTYPES", accountTypes);
 			request.setAttribute("ACCOUNTS", accounts);
 			request.setAttribute("CURRENCIES", currencies);
+			
+			ArrayList<Category> categoryList = CategoryService.getCategories(propertyValues);
+			ArrayList<SubCategory> subCategoryList = CategoryService.getSubCategories(propertyValues);
+			
+			request.setAttribute("CATEGORIES", categoryList);
+			request.setAttribute("SUBCATEGORIES", subCategoryList);
+			
 			
 			request.getRequestDispatcher("pages/accounts.jsp").forward(request, response);
 		}
