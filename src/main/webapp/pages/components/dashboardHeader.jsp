@@ -14,20 +14,24 @@
     rel="stylesheet" />
 <script type="text/javascript">
     function openAddRecordPopup() {
-        var popup = document.getElementById('recordPopup');  // Change the ID to 'recordPopup' which is used in recordPopup.jsp
+        var popup = document.getElementById('recordPopup');  
         popup.style.display = 'flex';
+        showSection('expense');  
     }
-    
+
     function showSection(section) {
         var sections = document.querySelectorAll('.content');
         sections.forEach(s => s.style.display = 'none');
         document.getElementById(section).style.display = 'block';
     }
+
     function closeAddRecordPopup() {
-        var popup = document.getElementById('recordPopup');  // Change the ID to 'recordPopup' which is used in recordPopup.jsp
+        var popup = document.getElementById('recordPopup');  
         popup.style.display = 'none';
+        showSection('expense');  
     }
 </script>
+
 <nav class="navbar navbar-expand-lg navbar-white fixed-top">
 <jsp:include page="/pages/components/recordPopup.jsp" />
 
