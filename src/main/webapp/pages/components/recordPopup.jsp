@@ -7,6 +7,7 @@
 <%@ page import="com.exavalu.entities.User"%>
 <%@ page import="com.exavalu.entities.Category"%>
 <%@ page import="com.exavalu.entities.SubCategory"%>
+
 <%
 User currentUserRecord = (User) session.getAttribute("USER");
 
@@ -26,35 +27,46 @@ function updateSubCategories(categoryId) {
     subCategorySelect.innerHTML = '';  
     var categoryIdInt = parseInt(categoryId);
 
-    <% for (SubCategory sub : subCategoryList) { %>
+    <%for (SubCategory sub : subCategoryList) {%>
         if (<%=sub.getCategoryId()%> === categoryIdInt) {
             var option = document.createElement('option');
             option.value = '<%=sub.getSubCategoryId()%>';
-            option.text = '<%=sub.getSubCategoryName()%>';
-            subCategorySelect.appendChild(option);
-        }
-    <% } %>
-}
+            option.text = '<%=sub.getSubCategoryName()%>
+	';
+			subCategorySelect.appendChild(option);
+		}
+<%}%>
+	}
+	
 </script>
 <div id="recordPopup"
-	style="display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4); z-index: 1050; justify-content: center; align-items: center; ">
+	style="display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4); z-index: 1050; justify-content: center; align-items: center;">
 	<div
-		style="background-color: #fefefe;  border: 1px solid #888; width: 60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); border-radius: 5px;">
+		style="background-color: #fefefe; border: 1px solid #888; width: 60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); border-radius: 5px;">
 		<div
-			style="display: flex; justify-content: space-between; align-items: center; padding:10px; padding-right: 20px; padding-left: 20px;">
+			style="display: flex; justify-content: space-between; align-items: center; padding: 10px; padding-right: 20px; padding-left: 20px;">
 			<h4 style="margin: 0;">ADD RECORD</h4>
 			<span onclick="closeAddRecordPopup()"
 				style="font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
 		</div>
 		<div style="display: flex; height: 80%;">
 			<div
-				style=" border-right: 1px solid #ccc; border-top: 1px solid #ccc;">
-				<div style="background-color: rgb(77, 182, 172);">
-					<div style="margin-bottom: 10px;">
-						<button onclick="showSection('expense')">Expense</button>
-						<button onclick="showSection('income')">Income</button>
-						<button onclick="showSection('transfer')">Transfer</button>
+				style="border-right: 1px solid #ccc; border-top: 1px solid #ccc;">
+				<div
+					style="background-color: rgb(77, 182, 172); padding-right: 10%; padding-left: 10%; padding-top: 5%; padding-bottom: 5%;">
+					<div style="margin-bottom: 10px; display: flex;">
+						<button id="btn-expense" class="section-button"
+							onclick="showSection('expense')"
+							style="flex: 1; border: solid white 1px; background-color: #fefefe; color: rgb(77, 182, 172); padding: 5px 10px; border-radius: 5px 0 0 5px;">Expense</button>
+						<button id="btn-income" class="section-button"
+							onclick="showSection('income')"
+							style="flex: 1; border: solid white 1px; background-color: rgb(77, 182, 172); color: white; padding: 5px 10px;">Income</button>
+						<button id="btn-transfer" class="section-button"
+							onclick="showSection('transfer')"
+							style="flex: 1; border: solid white 1px; background-color: rgb(77, 182, 172); color: white; padding: 5px 10px; border-radius: 0 5px 5px 0;">Transfer</button>
 					</div>
+
+
 					<!-- Expense Section Always Visible Initially -->
 					<div id="expense" class="content" style="display: block;">
 						<label for="expenseAccount">Account:</label> <select
@@ -152,46 +164,58 @@ function updateSubCategories(categoryId) {
 							id="transferAmount" name="transferAmount" required>
 					</div>
 				</div>
+				<div style="padding: 20px; padding-right: 30px; padding-left: 30px;">
+					<!-- Category and Subcategory in one row -->
+					<div
+						style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+						<div style="margin-right: 10px; flex: 1;">
+							<label for="category" class="form-label">Category</label> <select
+								id="category" name="category" class="form-control"
+								onchange="updateSubCategories(this.value)" required>
+								<option selected>Choose...</option>
+								<%
+								for (Category cat : categoryList) {
+								%>
+								<option value="<%=cat.getCategoryId()%>"><%=cat.getCategoryName()%></option>
+								<%
+								}
+								%>
+							</select>
+						</div>
+						<div style="flex: 1;">
+							<label for="subCategory" class="form-label">SubCategory</label> <select
+								id="subCategory" name="subCategory" class="form-control"
+								required>
+								<!-- Options will be dynamically added based on the selected category -->
+							</select>
+						</div>
+					</div>
 
-				<div>
-					<div class="mb-3">
-						<label for="category" class="form-label">Category</label> <select
-							id="category" name="category" class="form-control"
-							onchange="updateSubCategories(this.value)" required>
-							<option selected>Choose...</option>
-							<%
-							for (Category cat : categoryList) {
-							%>
-							<option value="<%=cat.getCategoryId()%>"><%=cat.getCategoryName()%></option>
-							<%
-							}
-							%>
-						</select>
-					</div>
-					<div class="mb-3">
-						<label for="subCategory" class="form-label">SubCategory</label> <select
-							id="subCategory" name="subCategory" class="form-control" required>
-							<!-- Options will be dynamically added based on the selected category -->
-						</select>
+					<!-- Date and Time in one row -->
+					<div
+						style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+						<div style="margin-right: 10px; flex: 1;">
+							<label for="date" class="form-label">Date</label> <input
+								type="date" id="date" name="date" class="form-control" required>
+						</div>
+						<div style="flex: 1;">
+							<label for="time" class="form-label">Time</label> <input
+								type="time" id="time" name="time" class="form-control" required>
+						</div>
 					</div>
 
-					<!-- Date and Time Selector remains the same -->
-					<div class="mb-3">
-						<label for="date" class="form-label">Date</label> <input
-							type="date" id="date" name="date" class="form-control" required>
-					</div>
-					<div class="mb-3">
-						<label for="time" class="form-label">Time</label> <input
-							type="time" id="time" name="time" class="form-control" required>
-					</div>
-					<div>
-						<button type="button" style="bottom: 20px; right: 20px;">Add
-							Record</button>
+					<!-- Center the Record button -->
+					<div
+						style="display: flex; justify-content: center; margin-top: 20px;">
+						<button onclick="openAddAccountPopup()"
+							style="background-color: #00aa70; color: white; padding: 10px 15px; width: 60%; border: none; border-radius: 20px; text-align: center; font-size: 16px; cursor: pointer; margin-bottom: 5px;">
+							Add Record</button>
 					</div>
 				</div>
 
 			</div>
-			<div style="width: 40%; padding: 20px; background-color: #eff0f2; border-top: 1px solid #ccc;">
+			<div
+				style="width: 40%; padding: 20px; background-color: #eff0f2; border-top: 1px solid #ccc;">
 				<form>
 					<div class="mb-3">
 						<label for="payee" class="form-label">Payee</label> <input

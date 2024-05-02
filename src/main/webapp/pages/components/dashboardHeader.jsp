@@ -23,9 +23,22 @@
 
     function showSection(section) {
         var sections = document.querySelectorAll('.content');
+        var buttons = document.querySelectorAll('.section-button');
+
         sections.forEach(s => s.style.display = 'none');
+        
+        buttons.forEach(btn => {
+            btn.style.backgroundColor = 'rgb(77, 182, 172)';
+            btn.style.color = 'white';
+        });
+
         document.getElementById(section).style.display = 'block';
+
+        var activeButton = document.getElementById('btn-' + section);
+        activeButton.style.backgroundColor = '#fefefe';
+        activeButton.style.color = 'rgb(77, 182, 172)';
     }
+
 
     function closeAddRecordPopup() {
         var popup = document.getElementById('recordPopup');  

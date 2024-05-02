@@ -7,6 +7,8 @@
 <%@ page import="com.exavalu.entities.AccountType"%>
 <%@ page import="com.exavalu.entities.Currency"%>
 <%@ page import="com.exavalu.entities.User"%>
+<%@ page import="com.exavalu.entities.Category"%>
+<%@ page import="com.exavalu.entities.SubCategory"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,10 +33,14 @@
 	User currentUser = (User) session.getAttribute("USER");
 	System.out.println("currentUser");
 	System.out.println(currentUser.getEmailAddress());
-	ArrayList<Account> accounts = (ArrayList<Account>) request.getAttribute("ACCOUNTS");
-	ArrayList<AccountType> accountTypeList = (ArrayList<AccountType>) request.getAttribute("ACCOUNTTYPES");
-	ArrayList<Currency> currencyList = (ArrayList<Currency>) request.getAttribute("CURRENCIES");
-
+	ArrayList<Account> accounts = (ArrayList<Account>) session.getAttribute("ACCOUNTS");
+	ArrayList<AccountType> accountTypeList = (ArrayList<AccountType>) session.getAttribute("ACCOUNTTYPES");
+	ArrayList<Currency> currencyList = (ArrayList<Currency>) session.getAttribute("CURRENCIES");
+	ArrayList<Category> categoryList = (ArrayList<Category>) session.getAttribute("CATEGORIES");
+	ArrayList<SubCategory> SubCategoryList = (ArrayList<SubCategory>) session.getAttribute("SUBCATEGORIES");
+	System.out.println("category List");
+	System.out.println(categoryList);
+	System.out.println(SubCategoryList);
 	Map<Integer, String> accountTypeMap = new HashMap<>();
 	Map<Integer, String> currencyMap = new HashMap<>();
 
@@ -53,6 +59,8 @@
     request.setAttribute("currencyList", currencyList);
     request.setAttribute("accountTypeMap", accountTypeMap);
     request.setAttribute("currencyMap", currencyMap);
+    request.setAttribute("categoryList", categoryList);
+    request.setAttribute("SubCategoryList", SubCategoryList);
     
 	%>
 	<jsp:include page="components/dashboardHeader.jsp" />
