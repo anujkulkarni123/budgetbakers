@@ -53,11 +53,13 @@ public class RecordService {
 		return -1.0;
 	}
 
-	private static double getConversionRateByCurrencyName(String currencyName, Connection con) {
-		String sql = "SELECT conversionRate FROM currencies WHERE currencyName = ?";
+	private static double getConversionRateById(int currencyName, Connection con) {
+		System.out.println("CONVERSION NAME");
+		System.out.println(currencyName);
+		String sql = "SELECT conversionRate FROM currencies WHERE id = ?";
 
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setString(1, currencyName);
+			ps.setInt(1, currencyName);
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					return rs.getDouble("conversionRate");
@@ -90,8 +92,9 @@ public class RecordService {
 			return false;
 		}
 
+		System.out.println(currentBalance);
 		double newBalance = currentBalance - amount;
-
+		System.out.println(newBalance);
 		String updateSql = "UPDATE accounts SET accountBalance = ? WHERE accountId = ?";
 		try (PreparedStatement updatePs = con.prepareStatement(updateSql)) {
 			updatePs.setDouble(1, newBalance);
@@ -138,7 +141,7 @@ public class RecordService {
 		}
 	}
 
-	public static boolean HandleExpense(String userEmail, String currency, int accountId, double amount,
+	public static boolean HandleExpense(String userEmail, int currency, int accountId, double amount,
 			PropertyValues propertyValues) {
 		System.out.println("IN HANDLE EXPENSE");
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
@@ -150,8 +153,13 @@ public class RecordService {
 		}
 
 		double accountConversionRate = getAccountCurrencyConversionRate(accountId, con);
-		double expenseConversionRate = getConversionRateByCurrencyName(currency, con);
-
+		double expenseConversionRate = getConversionRateById(currency, con);
+		
+		System.out.println("HERE");
+		System.out.println(amount);
+		System.out.println(expenseConversionRate);
+		System.out.println(accountConversionRate);
+		System.out.println((expenseConversionRate / accountConversionRate));
 		double actualConversion = (expenseConversionRate / accountConversionRate)*amount;
 
 		boolean modify = subtractFromAccount(accountId, actualConversion, con);
@@ -162,13 +170,13 @@ public class RecordService {
 		return false;
 	}
 
-	public static boolean HandleIncome(String userEmail, String currency, int accountId, double amount,
+	public static boolean HandleIncome(String userEmail, int currency, int accountId, double amount,
 			PropertyValues propertyValues) {
 		System.out.println("IN HANDLE INCOME");
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 		double accountConversionRate = getAccountCurrencyConversionRate(accountId, con);
-		double incomeConversionRate = getConversionRateByCurrencyName(currency, con);
+		double incomeConversionRate = getConversionRateById(currency, con);
 
 		double actualConversion = (incomeConversionRate / accountConversionRate)*amount;
 
@@ -180,14 +188,14 @@ public class RecordService {
 		return false;
 	}
 
-	public static boolean HandleTransfer(String userEmail, String currency, int fromAccountId, int toAccountId,
+	public static boolean HandleTransfer(String userEmail, int currency, int fromAccountId, int toAccountId,
 			double amount, PropertyValues propertyValues) {
 		System.out.println("IN HANDLE TRANSER");
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 		double fromAccountConversionRate = getAccountCurrencyConversionRate(fromAccountId, con);
 		double toAccountConversionRate = getAccountCurrencyConversionRate(toAccountId, con);
-		double transferConversionRate = getConversionRateByCurrencyName(currency, con);
+		double transferConversionRate = getConversionRateById(currency, con);
 		
 		double fromActualConversion = (transferConversionRate / fromAccountConversionRate)*amount;
 		double toActualConversion = (transferConversionRate / toAccountConversionRate)*amount;
@@ -202,10 +210,10 @@ public class RecordService {
 	}
 
 	public static boolean handleSaveRecord(int accountId, double amount, Date recordDate,
-			String currencyName, int type, String paymentStatus, int secondAccountId, String userEmail,
+			int currencyName, int type, String paymentStatus, int secondAccountId, String userEmail,
 			PropertyValues propertyValues) {
 
-		return false;
+		return true;
 	}
 
 }

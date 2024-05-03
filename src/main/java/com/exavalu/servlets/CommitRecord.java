@@ -65,7 +65,7 @@ public class CommitRecord extends HttpServlet {
 	    int secondAccountId = 0;
 	    int type = 0;
 	    double amount = 0;  
-	    String currencyName = ""; 
+	    int currencyName = -1; 
 	    boolean operationSuccess = false;
 	    String userEmail = request.getParameter("userEmail");
 
@@ -79,27 +79,29 @@ public class CommitRecord extends HttpServlet {
 	            secondAccountId = Integer.parseInt(secondAccountIdStr);
 	            type = 3;
 	            amount = Double.parseDouble(request.getParameter("transferAmount"));
-	            currencyName = request.getParameter("transferCurrency");
+	            currencyName = Integer.parseInt(request.getParameter("transferCurrency"));
+	            
 	            operationSuccess = RecordService.HandleTransfer(userEmail, currencyName, accountId, secondAccountId, amount, propertyValues);
 	        } else {
 	            accountId = Integer.parseInt(accountIdStr);
 	            type = 2;
 	            amount = Double.parseDouble(request.getParameter("incomeAmount"));
-	            currencyName = request.getParameter("incomeCurrency");
+	            currencyName = Integer.parseInt(request.getParameter("incomeCurrency"));
 	            operationSuccess = RecordService.HandleIncome(userEmail, currencyName, accountId, amount, propertyValues);
 	        }
 	    } else {
 	        accountId = Integer.parseInt(accountIdStr);
 	        type = 1;
 	        amount = Double.parseDouble(request.getParameter("expenseAmount"));
-	        currencyName = request.getParameter("expenseCurrency");
+	        currencyName = Integer.parseInt(request.getParameter("expenseCurrency"));
+	       
 	        operationSuccess = RecordService.HandleExpense(userEmail, currencyName, accountId, amount, propertyValues);
 	    }
 
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	    Date recordDate = null;
 	    try {
-	        java.util.Date utilDate = sdf.parse(request.getParameter("recordDate"));
+	        java.util.Date utilDate = sdf.parse(request.getParameter("date"));
 	        recordDate = new Date(utilDate.getTime());
 	    } catch (ParseException e) {
 	        e.printStackTrace();
@@ -110,7 +112,7 @@ public class CommitRecord extends HttpServlet {
 	    if (operationSuccess) {
 	        boolean saveSuccess = RecordService.handleSaveRecord(accountId, amount, recordDate, currencyName, type, request.getParameter("paymentStatus"), secondAccountId, userEmail, propertyValues);
 	        if (saveSuccess) {
-	            request.getRequestDispatcher("pages/success.jsp").forward(request, response);
+	        	request.getRequestDispatcher("/ViewAccount").forward(request, response);
 	        } else {
 	            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to save record.");
 	        }
