@@ -43,8 +43,7 @@ public class CommitRecord extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		ServletContext context = getServletContext();
+	    ServletContext context = getServletContext();
 	    Properties properties = new Properties();
 	    PropertyValues propertyValues = PropertyValues.getInstance();
 
@@ -53,67 +52,70 @@ public class CommitRecord extends HttpServlet {
 	            throw new IOException("Cannot find configuration file");
 	        }
 	        properties.load(input);
-	        
-	        System.out.println(properties.getProperty("dbname"));
-	        
-	        String dbName = properties.getProperty("dbname");
-	        String url = properties.getProperty("url");
-	        String user = properties.getProperty("user");
-	        String dbpassword = properties.getProperty("password");
-	        
-	        propertyValues.setDbname(dbName);
-	        propertyValues.setPassword(dbpassword);
-	        propertyValues.setUrl(url);
-	        propertyValues.setUser(user);
-	        
-	        System.out.println("Database Name: " + propertyValues.getDbname());
-	        System.out.println("URL: " + propertyValues.getUrl());
+	        System.out.println("Database Name: " + properties.getProperty("dbname"));
+	        propertyValues.setDbname(properties.getProperty("dbname"));
+	        propertyValues.setPassword(properties.getProperty("password"));
+	        propertyValues.setUrl(properties.getProperty("url"));
+	        propertyValues.setUser(properties.getProperty("user"));
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 
-		} catch (IOException e) {
-			e.printStackTrace(); 
-		}
+	    int accountId = 0;
+	    int secondAccountId = 0;
+	    int type = 0;
+	    double amount = 0;  
+	    String currencyName = ""; 
+	    boolean operationSuccess = false;
+	    String userEmail = request.getParameter("userEmail");
 
-        int recordId = Integer.parseInt(request.getParameter("recordId"));
-        int accountId = Integer.parseInt(request.getParameter("accountId"));
-        int secondAccountId = Integer.parseInt(request.getParameter("secondAccountId")); 
-        double amount = Double.parseDouble(request.getParameter("amount"));
-        String currencyName = request.getParameter("currencyName");
-        String type = request.getParameter("type");
-        String paymentStatus = request.getParameter("paymentStatus");
-        String userEmail = request.getParameter("userEmail");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date recordDate = null;
-        try {
-            java.util.Date utilDate = sdf.parse(request.getParameter("recordDate"));
-            recordDate = new Date(utilDate.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid date format.");
-            return;
-        }
+	    String accountIdStr = request.getParameter("expenseAccount");
+	    if (accountIdStr == null || accountIdStr.trim().isEmpty()) {
+	        accountIdStr = request.getParameter("incomeAccount");
+	        if (accountIdStr == null || accountIdStr.trim().isEmpty()) {
+	            accountIdStr = request.getParameter("transferFromAccount");
+	            String secondAccountIdStr = request.getParameter("transferToAccount");
+	            accountId = Integer.parseInt(accountIdStr);
+	            secondAccountId = Integer.parseInt(secondAccountIdStr);
+	            type = 3;
+	            amount = Double.parseDouble(request.getParameter("transferAmount"));
+	            currencyName = request.getParameter("transferCurrency");
+	            operationSuccess = RecordService.HandleTransfer(userEmail, currencyName, accountId, secondAccountId, amount, propertyValues);
+	        } else {
+	            accountId = Integer.parseInt(accountIdStr);
+	            type = 2;
+	            amount = Double.parseDouble(request.getParameter("incomeAmount"));
+	            currencyName = request.getParameter("incomeCurrency");
+	            operationSuccess = RecordService.HandleIncome(userEmail, currencyName, accountId, amount, propertyValues);
+	        }
+	    } else {
+	        accountId = Integer.parseInt(accountIdStr);
+	        type = 1;
+	        amount = Double.parseDouble(request.getParameter("expenseAmount"));
+	        currencyName = request.getParameter("expenseCurrency");
+	        operationSuccess = RecordService.HandleExpense(userEmail, currencyName, accountId, amount, propertyValues);
+	    }
 
-        boolean operationSuccess = false;
-        switch (type) {
-            case "Expense":
-                operationSuccess = RecordService.HandleExpense(userEmail, currencyName, accountId, amount, propertyValues);
-                break;
-            case "Income":
-                operationSuccess = RecordService.HandleIncome(userEmail, currencyName, accountId, amount, propertyValues);
-                break;
-            case "Transfer":
-                operationSuccess = RecordService.HandleTransfer(userEmail, currencyName, accountId, secondAccountId, amount, propertyValues);
-                break;
-        }
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	    Date recordDate = null;
+	    try {
+	        java.util.Date utilDate = sdf.parse(request.getParameter("recordDate"));
+	        recordDate = new Date(utilDate.getTime());
+	    } catch (ParseException e) {
+	        e.printStackTrace();
+	        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid date format.");
+	        return;
+	    }
 
-        if (operationSuccess) {
-            boolean saveSuccess = RecordService.handleSaveRecord(recordId, accountId, amount, recordDate, currencyName, type, paymentStatus, secondAccountId, userEmail, propertyValues);
-            if (saveSuccess) {
-                request.getRequestDispatcher("pages/success.jsp").forward(request, response);
-            } else {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to save record.");
-            }
-        } else {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to process record type operation.");
-        }
-    }
+	    if (operationSuccess) {
+	        boolean saveSuccess = RecordService.handleSaveRecord(accountId, amount, recordDate, currencyName, type, request.getParameter("paymentStatus"), secondAccountId, userEmail, propertyValues);
+	        if (saveSuccess) {
+	            request.getRequestDispatcher("pages/success.jsp").forward(request, response);
+	        } else {
+	            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to save record.");
+	        }
+	    } else {
+	        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to process record type operation.");
+	    }
+	}
 }

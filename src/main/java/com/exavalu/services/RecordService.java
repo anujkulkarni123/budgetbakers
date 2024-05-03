@@ -37,7 +37,7 @@ public class RecordService {
 			return -1.0;
 		}
 
-		String currencySql = "SELECT conversionRate FROM currencies WHERE currencyId = ?";
+		String currencySql = "SELECT conversionRate FROM currencies WHERE id = ?";
 		try (PreparedStatement ps = con.prepareStatement(currencySql)) {
 			ps.setInt(1, currencyId);
 			try (ResultSet rs = ps.executeQuery()) {
@@ -72,14 +72,14 @@ public class RecordService {
 	}
 
 	public static boolean subtractFromAccount(int accountId, double amount, Connection con) {
-		String fetchSql = "SELECT balance FROM accounts WHERE accountId = ?";
+		String fetchSql = "SELECT accountBalance FROM accounts WHERE accountId = ?";
 		double currentBalance = 0.0;
 
 		try (PreparedStatement fetchPs = con.prepareStatement(fetchSql)) {
 			fetchPs.setInt(1, accountId);
 			try (ResultSet rs = fetchPs.executeQuery()) {
 				if (rs.next()) {
-					currentBalance = rs.getDouble("balance");
+					currentBalance = rs.getDouble("accountBalance");
 				} else {
 					System.out.println("Account not found.");
 					return false;
@@ -92,7 +92,7 @@ public class RecordService {
 
 		double newBalance = currentBalance - amount;
 
-		String updateSql = "UPDATE accounts SET balance = ? WHERE accountId = ?";
+		String updateSql = "UPDATE accounts SET accountBalance = ? WHERE accountId = ?";
 		try (PreparedStatement updatePs = con.prepareStatement(updateSql)) {
 			updatePs.setDouble(1, newBalance);
 			updatePs.setInt(2, accountId);
@@ -106,7 +106,7 @@ public class RecordService {
 
 	public static boolean addToAccount(int accountId, double amount, Connection con) {
 
-		String fetchSql = "SELECT balance FROM accounts WHERE accountId = ?";
+		String fetchSql = "SELECT accountBalance FROM accounts WHERE accountId = ?";
 		double currentBalance = 0.0;
 
 		try (PreparedStatement fetchPs = con.prepareStatement(fetchSql)) {
@@ -126,7 +126,7 @@ public class RecordService {
 
 		double newBalance = currentBalance + amount;
 
-		String updateSql = "UPDATE accounts SET balance = ? WHERE accountId = ?";
+		String updateSql = "UPDATE accounts SET accountBalance = ? WHERE accountId = ?";
 		try (PreparedStatement updatePs = con.prepareStatement(updateSql)) {
 			updatePs.setDouble(1, newBalance);
 			updatePs.setInt(2, accountId);
@@ -140,7 +140,7 @@ public class RecordService {
 
 	public static boolean HandleExpense(String userEmail, String currency, int accountId, double amount,
 			PropertyValues propertyValues) {
-
+		System.out.println("IN HANDLE EXPENSE");
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 
@@ -164,7 +164,7 @@ public class RecordService {
 
 	public static boolean HandleIncome(String userEmail, String currency, int accountId, double amount,
 			PropertyValues propertyValues) {
-		
+		System.out.println("IN HANDLE INCOME");
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 		double accountConversionRate = getAccountCurrencyConversionRate(accountId, con);
@@ -182,7 +182,7 @@ public class RecordService {
 
 	public static boolean HandleTransfer(String userEmail, String currency, int fromAccountId, int toAccountId,
 			double amount, PropertyValues propertyValues) {
-		
+		System.out.println("IN HANDLE TRANSER");
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 		double fromAccountConversionRate = getAccountCurrencyConversionRate(fromAccountId, con);
@@ -201,8 +201,8 @@ public class RecordService {
 		return false;
 	}
 
-	public static boolean handleSaveRecord(int recordId, int accountId, double amount, Date recordDate,
-			String currencyName, String type, String paymentStatus, int secondAccountId, String userEmail,
+	public static boolean handleSaveRecord(int accountId, double amount, Date recordDate,
+			String currencyName, int type, String paymentStatus, int secondAccountId, String userEmail,
 			PropertyValues propertyValues) {
 
 		return false;
