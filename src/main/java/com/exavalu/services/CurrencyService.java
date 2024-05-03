@@ -31,6 +31,7 @@ public class CurrencyService {
 				Currency currency = new Currency();
 				currency.setId(rs.getInt("id"));
 				currency.setCurrencyName(rs.getString("currencyName"));
+				currency.setConversionRate(rs.getFloat("conversionRate"));
 				currencies.add(currency);
 			}
 

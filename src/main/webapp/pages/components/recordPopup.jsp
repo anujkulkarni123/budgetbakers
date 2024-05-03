@@ -52,7 +52,7 @@ function updateSubCategories(categoryId) {
 
 <div id="recordPopup"
 	style="display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4); z-index: 1050; justify-content: center; align-items: center;">
-	<div
+	<form action="CommitRecord" method="post"
 		style="background-color: #fefefe; border: 1px solid #888; width: 60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); border-radius: 5px;">
 		<div
 			style="display: flex; justify-content: space-between; align-items: center; padding: 10px; padding-right: 20px; padding-left: 20px;">
@@ -253,16 +253,17 @@ function updateSubCategories(categoryId) {
 					<!-- Center the Record button -->
 					<div
 						style="display: flex; justify-content: center; margin-top: 20px;">
-						<button onclick="openAddAccountPopup()"
-							style="background-color: #00aa70; color: white; padding: 10px 15px; width: 60%; border: none; border-radius: 20px; text-align: center; font-size: 16px; cursor: pointer; margin-bottom: 5px;">
-							Add Record</button>
+						<button type="submit"
+        style="background-color: #00aa70; color: white; padding: 10px 15px; width: 60%; border: none; border-radius: 20px; text-align: center; font-size: 16px; cursor: pointer; margin-bottom: 5px;">
+    Add Record
+</button>
 					</div>
 				</div>
 
 			</div>
 			<div
 				style="width: 40%; padding: 20px; background-color: #eff0f2; border-top: 1px solid #ccc;">
-				<form>
+				<div>
 					<div class="mb-3">
 						<label for="payee" class="form-label">Payee</label> <input
 							type="text" id="payee" name="payee" class="form-control">
@@ -291,8 +292,8 @@ function updateSubCategories(categoryId) {
 							<option value="failed">Failed</option>
 						</select>
 					</div>
-				</form>
+				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 </div>

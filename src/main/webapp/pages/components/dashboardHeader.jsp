@@ -25,19 +25,30 @@
         var sections = document.querySelectorAll('.content');
         var buttons = document.querySelectorAll('.section-button');
 
-        sections.forEach(s => s.style.display = 'none');
-        
+        sections.forEach(s => {
+            s.style.display = 'none';
+            
+            s.querySelectorAll('input, select').forEach(input => {
+                input.required = false;
+            });
+        });
+
         buttons.forEach(btn => {
             btn.style.backgroundColor = 'rgb(77, 182, 172)';
             btn.style.color = 'white';
         });
 
-        document.getElementById(section).style.display = 'block';
+        var activeSection = document.getElementById(section);
+        activeSection.style.display = 'block';
+        activeSection.querySelectorAll('input[required], select[required]').forEach(input => {
+            input.required = true;
+        });
 
         var activeButton = document.getElementById('btn-' + section);
         activeButton.style.backgroundColor = '#fefefe';
         activeButton.style.color = 'rgb(77, 182, 172)';
     }
+
 
 
     function closeAddRecordPopup() {
