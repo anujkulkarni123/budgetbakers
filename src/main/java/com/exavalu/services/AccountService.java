@@ -58,7 +58,7 @@ public class AccountService {
         // If the connection is null, log the error and return false
         if (con == null) {
             System.out.println("Unable to create database connection.");
-            return null; // Cannot proceed without a connection
+            return null; 
         }
        
         // Define the SQL query
@@ -76,6 +76,7 @@ public class AccountService {
                     Account account = new Account();
                     account.setAccountId(rs.getInt("accountId"));
                     account.setAccountBalance(rs.getFloat("accountBalance"));
+                    System.out.println(rs.getFloat("accountBalance"));
                     account.setAccountTypeId(rs.getInt("accountTypeId"));
                     account.setCurrencyId(rs.getInt("currencyId"));
                     account.setName(rs.getString("name"));

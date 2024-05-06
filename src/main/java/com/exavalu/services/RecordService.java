@@ -111,12 +111,11 @@ public class RecordService {
 
 		String fetchSql = "SELECT accountBalance FROM accounts WHERE accountId = ?";
 		double currentBalance = 0.0;
-
 		try (PreparedStatement fetchPs = con.prepareStatement(fetchSql)) {
 			fetchPs.setInt(1, accountId);
 			try (ResultSet rs = fetchPs.executeQuery()) {
 				if (rs.next()) {
-					currentBalance = rs.getDouble("balance");
+					currentBalance = rs.getDouble("accountBalance");
 				} else {
 					System.out.println("Account not found.");
 					return false;
@@ -212,8 +211,30 @@ public class RecordService {
 	public static boolean handleSaveRecord(int accountId, double amount, Date recordDate,
 			int currencyName, int type, String paymentStatus, int secondAccountId, String userEmail,
 			PropertyValues propertyValues) {
-
-		return true;
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		
+		String insertSQL = "INSERT INTO records (accountId, amount, recordDate, currencyName, type, secondAccountId, userEmail) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		try {
+            PreparedStatement preparedStatement = con.prepareStatement(insertSQL);
+            preparedStatement.setInt(1, accountId);
+            preparedStatement.setDouble(2, amount);
+            preparedStatement.setDate(3, recordDate);
+            preparedStatement.setInt(4, currencyName);
+            preparedStatement.setInt(5, type);
+            preparedStatement.setInt(6, secondAccountId);
+            preparedStatement.setString(7, userEmail);
+ 
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+	            return true;
+            } else {
+                return false;
+            }
+		}catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
 	}
 
 }
