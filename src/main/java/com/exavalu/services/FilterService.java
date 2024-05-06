@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,7 +120,7 @@ public class FilterService {
 		
 		String sql = "SELECT currencyName FROM Currencies";
 		
-		try (PreparedStatement ps = con.prepareStatement(sql)){
+		try (PreparedStatement ps = con.prepareStatement(sql))	{
 			
 			ResultSet rs = ps.executeQuery();
 			
@@ -133,8 +135,38 @@ public class FilterService {
 			e.printStackTrace();
 			return null;
 		}
-		
-		
 	}
 
+	public static Map<String, List<String>> parseString(String data) {
+        Map<String, List<String>> map = new HashMap<>();
+        
+        // Remove everything up to and including the question mark
+        int index = data.indexOf('?');
+        if (index == -1) {
+            return map; // Return empty map if no '?' found
+        }
+        String keyValuePairs = data.substring(index + 1);
+
+        // Split into key-value pairs
+        String[] pairs = keyValuePairs.split("&");
+        for (String pair : pairs) {
+            if (pair.isEmpty()) {
+                continue;
+            }
+            String[] keyValue = pair.split("=", 2);
+            if (keyValue.length < 2) {
+                continue; // Skip if there is no '=' or no value after '='
+            }
+            String key = keyValue[0];
+            String[] values = keyValue[1].split(",");
+            
+            // Add to the map, ensuring multiple values are stored in a list
+            map.putIfAbsent(key, new ArrayList<>());
+            map.get(key).addAll(Arrays.asList(values));
+        }
+        
+        return map;
+    }
+	
+	
 }

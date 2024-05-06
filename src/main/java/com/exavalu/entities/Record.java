@@ -6,8 +6,9 @@ import java.text.SimpleDateFormat;
 public class Record {
 	
 	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    private Date date = new Date();
+    private String date;
 	
+    private int recordId;
 	private int	accountId;
 	private double amount;
 	private String currencyName;
@@ -15,6 +16,10 @@ public class Record {
 	private String type;
 	private boolean paymentStatus;
 	private String category;
+	private String subCategory;
+	private String userEmail;
+	private String payee;
+	private String note;
 	
 	public int getAccountId() {
 		return accountId;
@@ -28,10 +33,10 @@ public class Record {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	public String getCurrencyName() {
@@ -64,5 +69,34 @@ public class Record {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	
+	public int getRecordId() {
+		return recordId;
+	}
+	public void setRecordId(int recordId) {
+		this.recordId = recordId;
+	}
+	public String getSubCategory() {
+		return subCategory;
+	}
+	public void setSubCategory(String subCategory) {
+		this.subCategory = subCategory;
+	}
+	public String getUserEmail() {
+		return userEmail;
+	}
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+	public String getPayee() {
+		return payee;
+	}
+	public void setPayee(String payee) {
+		this.payee = payee;
+	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
 }

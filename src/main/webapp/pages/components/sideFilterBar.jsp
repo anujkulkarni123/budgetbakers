@@ -26,7 +26,7 @@
             <label style="margin-top: 10px; font-size: 14px;">Filters</label>
             <div class="filterContainer">
                	<div class="d-flex justify-content-between">
-	                <button class="btn btn-primary btn-sm login-button" id="applyFiltersButton" onClick=>Apply Filters</button>
+	                <button class="btn btn-primary btn-sm login-button" id="applyFiltersButton">Apply Filters</button>
 	    			<button class="btn btn-primary btn-sm login-button" id="clearFiltersButton">Clear Filters</button>
                 </div>
                 <div class="accordion" id="accordionExample">

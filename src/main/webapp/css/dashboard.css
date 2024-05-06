@@ -7,9 +7,6 @@
 	width: 100%;
 }
 
-.card {
-	border: none;
-}
 
 .record-container {
 	display: flex;
@@ -23,7 +20,7 @@
 }
 
 .right-container {
-	width: 65%;
+	width: 100%;
 }
 
 .login-button {
@@ -161,4 +158,16 @@ hr {
 	height: 250px; /* Match the height of your cards */
 	background-color: #fafafa;
 	border: 1px dashed #ccc;
+}
+
+.card-enhanced 	{
+	width: 100%;
+	margin-top: 40px;
+    border: 1px solid #cccccc; /* Light grey border */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15); /* Subtle shadow */
+}
+
+.btn	{
+	
+	height: 100%;
 }
