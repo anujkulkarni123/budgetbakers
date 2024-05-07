@@ -38,7 +38,6 @@ function updateSubCategories(categoryId) {
     <% } %>
 }
 </script>
-
 <style>
 .styled-input {
 	border: 1px solid #ccc;
@@ -52,7 +51,7 @@ function updateSubCategories(categoryId) {
 
 <div id="recordPopup"
 	style="display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4); z-index: 1050; justify-content: center; align-items: center;">
-	<form action="CommitRecord" method="post"
+	<form action="CommitRecord" method="post" id="myForm"
 		style="background-color: #fefefe; border: 1px solid #888; width: 60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); border-radius: 5px;">
 		<div
 			style="display: flex; justify-content: space-between; align-items: center; padding: 10px; padding-right: 20px; padding-left: 20px;">

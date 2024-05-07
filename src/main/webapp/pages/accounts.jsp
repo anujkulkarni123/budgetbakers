@@ -16,7 +16,42 @@
 <title>Account Page</title>
 
 </head>
-<script type="text/javascript">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+	function updateAccountInDOM(accountsData) {
+		accountsData.forEach(function(updatedAccount) {
+			var accountElement = $("#account_" + updatedAccount.accountId);
+			accountElement.find(".account-balance").text(
+					updatedAccount.accountBalance);
+		});
+	}
+
+	function updateAccount() {
+		$.ajax({
+			type : "GET",
+			url : "/GetUpdatedAccounts",
+			success : function(response) {
+				updateAccountInDOM(response);
+			},
+			error : function(xhr, status, error) {
+				console.error("Error updating account:", error);
+			}
+		});
+	}
+	
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('myForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            updateAccount();
+            form.submit();
+        });
+    });
+</script>
+
+<script>
 	function openAddAccountPopup() {
 		var popup = document.getElementById('addAccountPopup');
 		popup.style.display = 'block';
@@ -27,8 +62,9 @@
 		popup.style.display = 'none';
 	}
 </script>
+
 <body style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
-	
+
 	<%
 	User currentUser = (User) session.getAttribute("USER");
 	System.out.println("currentUser");
@@ -55,13 +91,12 @@
 	System.out.println(accounts);
 	System.out.println(accountTypeList);
 	request.setAttribute("accounts", accounts);
-    request.setAttribute("accountTypeList", accountTypeList);
-    request.setAttribute("currencyList", currencyList);
-    request.setAttribute("accountTypeMap", accountTypeMap);
-    request.setAttribute("currencyMap", currencyMap);
-    request.setAttribute("categoryList", categoryList);
-    request.setAttribute("SubCategoryList", SubCategoryList);
-    
+	request.setAttribute("accountTypeList", accountTypeList);
+	request.setAttribute("currencyList", currencyList);
+	request.setAttribute("accountTypeMap", accountTypeMap);
+	request.setAttribute("currencyMap", currencyMap);
+	request.setAttribute("categoryList", categoryList);
+	request.setAttribute("SubCategoryList", SubCategoryList);
 	%>
 	<jsp:include page="components/dashboardHeader.jsp" />
 	<div
@@ -152,7 +187,7 @@
 				iconPath = "images/savings.png";
 					}
 			%>
-			<div
+			<div id="account_<%=account.getAccountId()%>"
 				style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 10px; background-color: white; border-radius: 5px; padding: 10px;">
 				<%
 				if (!iconPath.isEmpty()) {

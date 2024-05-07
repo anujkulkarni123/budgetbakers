@@ -129,7 +129,7 @@ public class CommitRecord extends HttpServlet {
 				request.setAttribute("ACCOUNTTYPES", accountTypes);
 				request.setAttribute("ACCOUNTS", accounts);
 				request.setAttribute("CURRENCIES", currencies);
-	        	request.getRequestDispatcher("/pages/dashboard.jsp").forward(request, response);
+	        	request.getRequestDispatcher("/ViewAccount").forward(request, response);
 	        } else {
 	            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to save record.");
 	        }
