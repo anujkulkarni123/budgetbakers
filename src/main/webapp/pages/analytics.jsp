@@ -136,9 +136,57 @@ html, body {
 		src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 	<script>
+	function getFilterSettings() {
+	    var filterSettings = {};
+
+	    // Iterate through each accordion item to gather filter values
+	    document.querySelectorAll('.accordion-item').forEach(function(group) {
+	        var groupName = group.querySelector('.accordion-header button').textContent.trim();
+	        var checkedValues = [];
+	        group.querySelectorAll('input[type="checkbox"]:checked').forEach(function(checkbox) {
+	            checkedValues.push(checkbox.value);
+	        });
+	        filterSettings[groupName.toLowerCase().replace(/\s+/g, '')] = checkedValues;
+	    });
+
+	    // Convert filter settings to JSON and return
+	    return JSON.stringify(filterSettings);
+	}
+
+	function applyFilters() {
+	    // Get the current filter settings
+	    filterJSON = getFilterSettings();
+	    console.log(filterJSON);
+
+	    // Call the loadReport function with updated filters
+	    loadReport();
+	}
+
+    // Function to clear filters
+    function clearFilters() {
+        // Reset all checkboxes to default state
+        document.querySelectorAll('.accordion-item').forEach(function(group) {
+            var allCheckbox = group.querySelector('input[value="all"]');
+            if (allCheckbox) {
+                allCheckbox.checked = true; // Reset to default "All" state
+            }
+            group.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+                if (checkbox.value !== "all") {
+                    checkbox.checked = false; // Uncheck all other filters
+                }
+            });
+        });
+
+        // Trigger the applyFiltersButton click event to reapply filters
+        document.getElementById("applyFiltersButton").click();
+    }
+   
+    // when we apply filters, we want to call LoadReport to pass it these filters:
+    // pass it as a JSON string
 		let myChart;
-		
 		function loadReport(val) {
+			filterJSON = getFilterSettings();
+			console.log(filterJSON);
 			// we need to update the dropdown button
 			let dropdownButton = document.getElementById("toggleDuration");
 			let checkedTime = document.querySelector('input[name = "duration"]:checked');
@@ -195,7 +243,8 @@ html, body {
 					reportId : val,
 					duration : checkedTime.value,
 					customStartDate : startDate.value,
-					customEndDate : endDate.value
+					customEndDate : endDate.value,
+					filters: filterJSON,
 
 				},
 				dataType : chartIds.includes(val) ? "json" : "html", // might replace with val == 1 ?
@@ -251,8 +300,6 @@ html, body {
 			});
 
 		};
-	</script>
-	<script>
 		$(function() {
 			$('input[name="startDate"]').daterangepicker({
 				singleDatePicker : true,
@@ -264,8 +311,6 @@ html, body {
 				}
 			});
 		});
-	</script>
-	<script>
 		$(function() {
 			$('input[name="endDate"]').daterangepicker({
 				singleDatePicker : true,
