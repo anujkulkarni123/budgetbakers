@@ -12,12 +12,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONObject;
+import javax.servlet.http.HttpSession;
 
+import com.exavalu.entities.AnalyticFilter;
 import com.exavalu.entities.Category;
 import com.exavalu.entities.Duration;
 import com.exavalu.entities.Report;
+import com.exavalu.entities.User;
 import com.exavalu.pojos.PropertyValues;
+import com.exavalu.services.AnalyticFilterService;
 import com.exavalu.services.TransactionService;
 import com.exavalu.services.UserService;
 
@@ -83,6 +86,12 @@ public class LoadReport extends HttpServlet {
 
 		// data for filtering reports
 		System.out.println("Report Type ID: " + reportId);
+		System.out.println("JSON for filters: " + request.getParameter("filters"));
+		
+		AnalyticFilter filters = AnalyticFilterService.getConditions(request.getParameter("filters"));
+		String filterQuery = AnalyticFilterService.getFilterQuery(filters);
+		
+		
 		int duration = Integer.parseInt(request.getParameter("duration"));
 		String startDate = request.getParameter("customStartDate");
 		String endDate = request.getParameter("customEndDate");
@@ -93,14 +102,18 @@ public class LoadReport extends HttpServlet {
 
 		System.out.println("Date Range Selected: " + dateTimes.getLength() + " with: " + dateTimes.getStartDate() + " "
 				+ dateTimes.getEndDate()); 
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("USER");
+		String emailAddress = user.getEmailAddress();
 
 		// we need to get all of our report data here
-		double totalIncome = TransactionService.getTotalIncome(false, propertyValues, dateTimes);
-		double totalExpense = TransactionService.getTotalIncome(true, propertyValues, dateTimes);
-		Hashtable<String, Double> totalByCategory = TransactionService.getCategoriesExpenses(propertyValues, dateTimes);
-		double pastPeriodTotalIncome = TransactionService.getTotalIncome(false, propertyValues, TransactionService.getPreviousPeriod(dateTimes));
-		double pastPeriodTotalExpense = TransactionService.getTotalIncome(true, propertyValues, TransactionService.getPreviousPeriod(dateTimes));
-		Hashtable<String, Double> pastPeriodTotalByCategory = TransactionService.getCategoriesExpenses(propertyValues, TransactionService.getPreviousPeriod(dateTimes));
+		double totalIncome = TransactionService.getTotalIncome(false, propertyValues, dateTimes,filterQuery, emailAddress);
+		double totalExpense = TransactionService.getTotalIncome(true, propertyValues, dateTimes,filterQuery, emailAddress);
+		Hashtable<String, Double> totalByCategory = TransactionService.getCategoriesExpenses(propertyValues, dateTimes,filterQuery, emailAddress);
+		double pastPeriodTotalIncome = TransactionService.getTotalIncome(false, propertyValues, TransactionService.getPreviousPeriod(dateTimes),filterQuery, emailAddress);
+		double pastPeriodTotalExpense = TransactionService.getTotalIncome(true, propertyValues, TransactionService.getPreviousPeriod(dateTimes),filterQuery, emailAddress);
+		Hashtable<String, Double> pastPeriodTotalByCategory = TransactionService.getCategoriesExpenses(propertyValues, 
+				TransactionService.getPreviousPeriod(dateTimes),filterQuery, emailAddress);
 		
 		request.setAttribute("DURATION", dateTimes);
 		request.setAttribute("TOTAL_INCOME", totalIncome);
@@ -109,55 +122,56 @@ public class LoadReport extends HttpServlet {
 		request.setAttribute("PAST_TOTAL_INCOME", pastPeriodTotalIncome);
 		request.setAttribute("PAST_TOTAL_EXPENSE", pastPeriodTotalExpense);
 		request.setAttribute("PAST_TOTAL_BY_CATEGORY", pastPeriodTotalByCategory);
-		
-		
-		// gets a map of transaction spendings based off of categories
-		
+
 		switch (reportId) {
 		case 1:
 			// we need to check dateTimes and get the appropriate duration
 			request.getRequestDispatcher("pages/components/incomeExpenseTable.jsp").forward(request, response);
 			break;
 		case 2:
-			JSONObject json2 = TransactionService.getCashFlow(propertyValues, dateTimes);
+			String json2 = TransactionService.getCashFlow(propertyValues, dateTimes,filterQuery, emailAddress);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(json2.toString());
+			response.getWriter().write(json2);
 			System.out.println("Sending data for generating Cash Flow chart");
 			break;
 		case 3:
+			String json3 = TransactionService.getCumulativeCashFlow(propertyValues, dateTimes,filterQuery, emailAddress);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(json3);
 			System.out.println("Sending data for generating Cumulative Cash Flow chart.");
 			break;
 		case 4:
-			JSONObject json4 = TransactionService.getCumulativeIncome(true, propertyValues, dateTimes);
+			String json4 = TransactionService.getCumulativeIncome(true, propertyValues, dateTimes,filterQuery, emailAddress);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(json4.toString());
-			System.out.println("Sending data for generating Expense bar chart."); 
-			System.out.println("Sending data for generating Cumulative income chart.");
-			System.out.println("Sending data for generating Cumulative Expenses chart.");
+			System.out.println("Sending data for generating cumulative Expense bar chart."); 
 			break;
 		case 5:
-			JSONObject json5 = TransactionService.getCumulativeIncome(false, propertyValues, dateTimes);
+			String json5 = TransactionService.getCumulativeIncome(false, propertyValues, dateTimes,filterQuery, emailAddress);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(json5.toString());
-			System.out.println("Sending data for generating Expense bar chart."); 
+			response.getWriter().write(json5);
 			System.out.println("Sending data for generating Cumulative income chart.");
 			break;
 		case 6:
-			JSONObject json6 = TransactionService.getIncome(true, propertyValues, dateTimes);
+			String json6 = TransactionService.getIncome(true, propertyValues, dateTimes,filterQuery, emailAddress);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(json6.toString());
+			response.getWriter().write(json6);
 			System.out.println("Sending data for generating Expense bar chart."); 
 			break;
 		case 7:
-			JSONObject json7 = TransactionService.getIncome(false, propertyValues, dateTimes);
+			String json7 = TransactionService.getIncome(false, propertyValues, dateTimes,filterQuery, emailAddress);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(json7.toString());
+			response.getWriter().write(json7);
 			System.out.println("Sending data for generating Income bar chart");
+			break;
+		case 8:
+			System.out.println("Sending data for generating balance chart");
 			break;
 		}
 	}
