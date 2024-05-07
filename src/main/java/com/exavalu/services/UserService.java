@@ -8,6 +8,9 @@ import java.util.Random;
 
 import java.util.ArrayList;
 
+import com.exavalu.entities.Account;
+import com.exavalu.entities.Category;
+import com.exavalu.entities.Report;
 import com.exavalu.entities.Menu;
 import com.exavalu.entities.User;
 import com.exavalu.pojos.PropertyValues;
@@ -16,7 +19,130 @@ import com.exavalu.utilities.EmailUtility;
 import com.exavalu.utilities.MD5Hash;
 
 public class UserService {
+	public static ArrayList<Report> getReports(PropertyValues propertyValues) {
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		ArrayList<Report> reports = new ArrayList<>();
+		String sql = "SELECT * FROM Reports ORDER BY analysisIndex";
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			System.out.println("SQL: " + ps);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Report report = new Report();
+					report.setAnalysisName(rs.getString("analysisName"));
+					report.setAnalysisValue(rs.getInt("analysisIndex"));
+					reports.add(report);
+				}
+			}
+		} catch (SQLException e) {
+			// Log and handle the exception
+			e.printStackTrace();
+			// Return false as the validation was not successful
+			return reports;
+		} finally {
+			// Close the connection
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return reports;
+	}
+	public static ArrayList<Account> getAccounts(PropertyValues propertyValues) {
+		ArrayList<Account> accounts = new ArrayList<>();
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		String sql = "SELECT * FROM Accounts";
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Account account = new Account();
+					account.setAccountId(rs.getInt("accountId"));
+					account.setAccountType(rs.getString("accountType"));
+					account.setAccountBalance(rs.getDouble("accountBalance"));
+					account.setTransactionId(rs.getInt("transactionId"));
+					account.setRecordId(rs.getInt("recordId"));
+					account.setCreatedAt(rs.getString("createdAt"));
+					account.setAccountName(rs.getString("accountName"));
+					accounts.add(account);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return accounts;
+	}
+	public static ArrayList<Category> getCategories(PropertyValues propertyValues) {
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		ArrayList<Category> categories = new ArrayList<>();
+		String sql = "SELECT * FROM Categories ORDER BY categoryId";
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			System.out.println("SQL: " + ps);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Category category = new Category();
+					category.setCategoryIcon(rs.getString("categoryIcon"));
+					category.setCategoryName(rs.getString("categoryName"));
+					category.setCategoryId(rs.getInt("categoryId"));
+					category.setCategoryColor(rs.getString("categoryColor"));
+					categories.add(category);
+				}
+			}
+		} catch (SQLException e) {
+			// Log and handle the exception
+			e.printStackTrace();
+			// Return false as the validation was not successful
+			return categories;
+		} finally {
+			// Close the connection
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return categories;
+	}
+	public static ArrayList<String> getCurrencies(PropertyValues propertyValues) {
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		ArrayList<String> currencies = new ArrayList<>();
+		String sql = "SELECT * FROM Currencies";
 
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			try (ResultSet rs = ps.executeQuery(sql)) {
+				while (rs.next()) {
+					currencies.add(rs.getString("currencyName"));
+				}
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		return currencies;
+	}
 	public static boolean validateUser(String emailAddress, String password, PropertyValues propertyValues) {
         
         // Get the database connection
