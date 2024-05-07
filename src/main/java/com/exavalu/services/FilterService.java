@@ -111,12 +111,12 @@ public class FilterService {
 
 	}
 	
-	public static ArrayList<FilterItem> getCurrencies(PropertyValues propertyValues)	{
+	public static ArrayList<String> getCurrencies(PropertyValues propertyValues)	{
 		
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 		
-		ArrayList<FilterItem> currencies = new ArrayList<>();
+		ArrayList<String> currencies = new ArrayList<>();
 		
 		String sql = "SELECT currencyName FROM Currencies";
 		
@@ -125,8 +125,7 @@ public class FilterService {
 			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {
-				FilterItem item = new FilterItem();
-				item.setFilterName(rs.getString("currencyName"));
+				String item = rs.getString("currencyName");
 				currencies.add(item);
 			}
 			return currencies;

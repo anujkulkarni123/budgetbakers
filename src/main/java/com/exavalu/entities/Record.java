@@ -1,13 +1,15 @@
 package com.exavalu.entities;
-import java.util.Date;
+
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class Record {
+public class Record implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private String date;
-	
+	private String recordDate;
     private int recordId;
 	private int	accountId;
 	private double amount;
@@ -98,5 +100,11 @@ public class Record {
 	}
 	public void setNote(String note) {
 		this.note = note;
+	}
+	public String getRecordDate() {
+		return recordDate;
+	}
+	public void setRecordDate(String recordDate) {
+		this.recordDate = recordDate;
 	}
 }
