@@ -8,6 +8,10 @@
 <%@ page import="com.exavalu.entities.Category"%>
 <%@ page import="com.exavalu.entities.SubCategory"%>
 
+<%-- 
+THIS ENTIRE SECTION DOES NOT WORK
+
+All commented sections do not work, and I could not trace the code on the backend
 <%
 User currentUserRecord = (User) session.getAttribute("USER");
 
@@ -20,8 +24,11 @@ ArrayList<SubCategory> subCategoryList = (ArrayList<SubCategory>) request.getAtt
 
 Map<Integer, String> accountTypeMapRecord = (Map<Integer, String>) request.getAttribute("accountTypeMap");
 Map<Integer, String> currencyMapRecord = (Map<Integer, String>) request.getAttribute("currencyMap");
-%>
+%> --%>
 
+
+
+<%-- <!--   -->
 <script>
 function updateSubCategories(categoryId) {
     var subCategorySelect = document.getElementById('subCategory');
@@ -37,7 +44,7 @@ function updateSubCategories(categoryId) {
         }
     <% } %>
 }
-</script>
+</script> --%>
 
 <style>
 .styled-input {
@@ -83,13 +90,13 @@ function updateSubCategories(categoryId) {
 							<label for="expenseAccount"
 								style="display: block; font-size: smaller;">Account:</label> <select
 								id="expenseAccount" name="expenseAccount" class="styled-input">
-								<%
+								<%-- <%
 								for (Account account : accountsRecord) {
 								%>
 								<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
 								<%
 								}
-								%>
+								%> --%>
 							</select>
 						</div>
 						<div style="display: flex;">
@@ -104,13 +111,13 @@ function updateSubCategories(categoryId) {
 									style="display: block; font-size: smaller;">Currency:</label> <select
 									id="expenseCurrency" name="expenseCurrency"
 									class="styled-input">
-									<%
+									<%-- <%
 									for (Currency currency : currencyListRecord) {
 									%>
 									<option value="<%=currency.getId()%>"><%=currency.getCurrencyName()%></option>
 									<%
 									}
-									%>
+									%> --%>
 								</select>
 							</div>
 						</div>
@@ -122,13 +129,13 @@ function updateSubCategories(categoryId) {
 							<label for="incomeAccount"
 								style="display: block; font-size: smaller;">Account:</label> <select
 								id="incomeAccount" name="incomeAccount" class="styled-input">
-								<%
+								<%-- <%
 								for (Account account : accountsRecord) {
 								%>
 								<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
 								<%
 								}
-								%>
+								%> --%>
 							</select>
 						</div>
 						<div style="display: flex;">
@@ -142,13 +149,13 @@ function updateSubCategories(categoryId) {
 								<label for="incomeCurrency"
 									style="display: block; font-size: smaller;">Currency:</label> <select
 									id="incomeCurrency" name="incomeCurrency" class="styled-input">
-									<%
+									<%-- <%
 									for (Currency currency : currencyListRecord) {
 									%>
 									<option value="<%=currency.getId()%>"><%=currency.getCurrencyName()%></option>
 									<%
 									}
-									%>
+									%> --%>
 								</select>
 							</div>
 						</div>
@@ -162,13 +169,13 @@ function updateSubCategories(categoryId) {
 									style="display: block; font-size: smaller;">From
 									Account:</label> <select id="transferFromAccount"
 									name="transferFromAccount" class="styled-input">
-									<%
+									<%-- <%
 									for (Account account : accountsRecord) {
 									%>
 									<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
 									<%
 									}
-									%>
+									%> --%>
 								</select>
 							</div>
 							<div style="flex: 1;">
@@ -176,13 +183,13 @@ function updateSubCategories(categoryId) {
 									style="display: block; font-size: smaller;">To Account:</label>
 								<select id="transferToAccount" name="transferToAccount"
 									class="styled-input">
-									<%
+									<%-- <%
 									for (Account account : accountsRecord) {
 									%>
 									<option value="<%=account.getAccountId()%>"><%=account.getName()%></option>
 									<%
 									}
-									%>
+									%> --%>
 								</select>
 							</div>
 						</div>
@@ -198,13 +205,13 @@ function updateSubCategories(categoryId) {
 									style="display: block; font-size: smaller;">Currency:</label> <select
 									id="transferCurrency" name="transferCurrency"
 									class="styled-input">
-									<%
+									<%-- <%
 									for (Currency currency : currencyListRecord) {
 									%>
 									<option value="<%=currency.getId()%>"><%=currency.getCurrencyName()%></option>
 									<%
 									}
-									%>
+									%> --%>
 								</select>
 							</div>
 						</div>
@@ -220,13 +227,13 @@ function updateSubCategories(categoryId) {
 								id="category" name="category" class="form-control"
 								onchange="updateSubCategories(this.value)" required>
 								<option selected>Choose...</option>
-								<%
+								<%-- <%
 								for (Category cat : categoryList) {
 								%>
 								<option value="<%=cat.getCategoryId()%>"><%=cat.getCategoryName()%></option>
 								<%
 								}
-								%>
+								%> --%>
 							</select>
 						</div>
 						<div style="flex: 1;">

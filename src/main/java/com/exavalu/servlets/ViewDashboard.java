@@ -6,7 +6,10 @@ import com.exavalu.pojos.PropertyValues;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -58,8 +61,9 @@ public class ViewDashboard extends HttpServlet {
         }
 
         // Get cards from CardsService
-
         List<Card> cards = CardService.getCards(propertyValues);
+		Map<String, List<Card>> cardsByType = cards.stream().collect(Collectors.groupingBy(Card::getType));
+		request.setAttribute("CARDS_BY_TYPE", cardsByType);
         request.setAttribute("CARDS", cards);
 
         // Forward to JSP

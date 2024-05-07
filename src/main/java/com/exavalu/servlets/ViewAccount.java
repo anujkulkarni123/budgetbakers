@@ -87,7 +87,6 @@ public class ViewAccount extends HttpServlet {
 			request.setAttribute("CATEGORIES", categoryList);
 			request.setAttribute("SUBCATEGORIES", subCategoryList);
 			
-			
 			request.getRequestDispatcher("pages/accounts.jsp").forward(request, response);
 		}
 		else

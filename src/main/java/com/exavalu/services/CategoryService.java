@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.exavalu.entities.Account;
 import com.exavalu.entities.AccountType;
+import com.exavalu.entities.Category;
 import com.exavalu.entities.Currency;
 import com.exavalu.entities.Menu;
 import com.exavalu.entities.SubCategory;
@@ -53,8 +54,8 @@ public class CategoryService {
 	
 	
 	public static ArrayList<SubCategory> getSubCategories(PropertyValues propertyValues) {
-		 DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
-	     Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+	    Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 	     
 		String sql = "SELECT * FROM subcategories";
 		ArrayList<SubCategory> subCategoryList = new ArrayList<>();
@@ -65,7 +66,7 @@ public class CategoryService {
               	SubCategory category = new SubCategory();
               	category.setSubCategoryId(rs.getInt("subCategoryId"));
               	category.setCategoryId(rs.getInt("categoryId"));
-              	category.setSubCategoryName(rs.getString("subCategoryaName"));
+              	category.setSubCategoryName(rs.getString("subCategoryName"));
               	subCategoryList.add(category);
               }
           }

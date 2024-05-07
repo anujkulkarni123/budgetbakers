@@ -118,16 +118,16 @@ public class Login extends HttpServlet {
 					request.getSession().setAttribute("MENULIST", menuItems);
 					
 					ArrayList<AccountType> accountTypes = AccountService.getAccountTypes(propertyValues);
-					ArrayList<Account> accounts = AccountService.getAccounts(appUser.getEmailAddress(), propertyValues);
+					ArrayList<Account> accounts = AccountService.getAccounts(user.getEmailAddress(), propertyValues);
 					ArrayList<Currency> currencies = CurrencyService.getCurrencies(propertyValues);
 					
 					System.out.println(accountTypes);
 					System.out.println(accounts);
 					System.out.println(currencies);
 					
-					session.setAttribute("ACCOUNTTYPES", accountTypes);
-					session.setAttribute("ACCOUNTS", accounts);
-					session.setAttribute("CURRENCIES", currencies);
+					request.getSession().setAttribute("ACCOUNTTYPES", accountTypes);
+					request.getSession().setAttribute("ACCOUNTS", accounts);
+					request.getSession().setAttribute("CURRENCIES", currencies);
 
 					ArrayList<Category> categoryList = CategoryService.getCategories(propertyValues);
 					ArrayList<SubCategory> subCategoryList = CategoryService.getSubCategories(propertyValues);
@@ -135,8 +135,8 @@ public class Login extends HttpServlet {
 					System.out.println(categoryList);
 					System.out.println(subCategoryList);
 					
-					session.setAttribute("CATEGORIES", categoryList);
-					session.setAttribute("SUBCATEGORIES", subCategoryList);
+					request.getSession().setAttribute("CATEGORIES", categoryList);
+					request.getSession().setAttribute("SUBCATEGORIES", subCategoryList);
 
 					request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
 				} else {

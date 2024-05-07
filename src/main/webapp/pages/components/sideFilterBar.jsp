@@ -10,11 +10,9 @@
     <script src="js/Filter.js"></script> <!-- Include your external JS file -->
     
     <script>
-    
     	var filterType = `<%= filterHeader%>`;
     </script>
 </head>
-
 
 <body>
     <div class="card" style="min-height: 100%;">
