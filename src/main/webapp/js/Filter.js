@@ -51,43 +51,47 @@ function fetchRecords(query) {
 
 function updateResultsContainer(records) {
     const resultsContainer = document.getElementById('result-container');
-    const sumSpan = document.getElementById('numberValue'); // Get the span where the total will be displayed
-    resultsContainer.innerHTML = ''; // Clear existing results
-    let totalSum = 0; // Initialize total sum
+    const sumSpan = document.getElementById('numberValue');
+    resultsContainer.innerHTML = '';
+    let totalSum = 0;
 
     if (records && records.length > 0) {
         records.forEach(record => {
-            totalSum += parseFloat(record.amount); // Ensure you add the amount as a number, parse it if it's string
+            totalSum += parseFloat(record.amount);
             const cardDiv = document.createElement('div');
             cardDiv.className = 'card card-enhanced my-3 w-full';
-          cardDiv.innerHTML = `
-		    <div class="card-body px-4">
-			    <div class="row justify-content-between align-items-center">
-			        <div class="col-md-3">
-			            <input type="checkbox" value="${record.recordId}" class="form-check-input me-2">
-			            <span>${record.subCategory}</span>
-			        </div>
-			        <div class="col-md-2">${record.type}</div>
-			        <div class="col-md-2">${record.payee || ""}</div>
-			        <div class="col-md-2">${record.note || ""}</div>
-			        <div class="col-md-2">${record.amount.toFixed(2)}</div>
-			        <div class="col-md-1">
-			            <button class="btn btn-primary" onclick="editRecord('${record.recordId}')">
-			                <i class="fas fa-edit"></i>
-			            </button>
-			        </div>
-			    </div>
-			</div>
-
-		`;
+            cardDiv.innerHTML = `
+                <div class="card-body px-4">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-3">
+                            <input type="checkbox" value="${record.recordId}" class="form-check-input record-checkbox me-2">
+                            <span>${record.subCategory}</span>
+                        </div>
+                        <div class="col-md-2">${record.type}</div>
+                        <div class="col-md-2">${record.payee || ""}</div>
+                        <div class="col-md-2">${record.note || ""}</div>
+                        <div class="col-md-2">${record.amount.toFixed(2)}</div>
+                        <div class="col-md-1">
+                            <button class="btn btn-primary" onclick="editRecord('${record.recordId}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
             resultsContainer.appendChild(cardDiv);
         });
-        sumSpan.textContent = totalSum.toFixed(2); // Update the text content of the span with the formatted total sum
+        // Add event listeners to each checkbox after appending them to the DOM
+        resultsContainer.querySelectorAll('.record-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', handleRecordSelection);
+        });
+        sumSpan.textContent = totalSum.toFixed(2);
     } else {
         resultsContainer.innerHTML = '<p>No records found.</p>';
-        sumSpan.textContent = '0.00'; // Reset sum display if no records are found
+        sumSpan.textContent = '0.00';
     }
 }
+
 
 
 function fetchDataAndInitializeAccordions() {

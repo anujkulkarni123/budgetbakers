@@ -10,12 +10,11 @@ function toggleSelectAll(checked) {
 }
 
 function handleRecordSelection() {
-    // Check if any checkbox in the results container is selected
     updateConditionalDivVisibility();
 }
 
 function updateConditionalDivVisibility() {
-    const anyChecked = document.querySelector('.record-checkbox:checked') || document.getElementById('selectAll').checked;
+    const anyChecked = document.querySelector('.record-checkbox:checked') !== null;
     const conditionalDiv = document.getElementById('conditionalDiv');
     conditionalDiv.style.display = anyChecked ? 'block' : 'none';
 }

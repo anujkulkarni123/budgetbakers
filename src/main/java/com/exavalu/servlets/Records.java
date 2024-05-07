@@ -7,13 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.stream.Collectors;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,10 +23,6 @@ import org.json.JSONObject;
 import com.exavalu.pojos.PropertyValues;
 import com.exavalu.services.FilterService;
 import com.exavalu.services.RecordsService;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.exavalu.entities.FilterItem;
 import com.exavalu.entities.User;
 import com.exavalu.entities.Record;
 
