@@ -3,7 +3,7 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.Hashtable"%>
 <%@ page import="java.text.DecimalFormat"%>
-
+<%@ page import="java.text.NumberFormat" %>
 <%
 System.out.println("Entered Income/Expense Table");
 
@@ -31,19 +31,7 @@ if (duration != null) {
 	}
 }
 
-
-DecimalFormat df = new DecimalFormat("#.00");
-double total = totalIncome + totalExpense;
-String totalFormatted = total < 0 ? currencies.get(0) + " -$" + df.format(total * -1)
-		: currencies.get(0) + " $" + df.format(total * -1);
-String totalIncomeFormatted = totalIncome < 0 ? currencies.get(0) + " -$" + df.format(totalIncome)
-		: currencies.get(0) + " $" + df.format(totalIncome);
-String totalExpenseFormatted = totalExpense < 0 ? currencies.get(0) + " -$" + df.format(totalExpense * -1)
-		: currencies.get(0) + " $" + df.format(totalExpense);
-String pastTotalIncomeFormatted = pastTotalIncome < 0 ? currencies.get(0) + " -$" + df.format(pastTotalIncome) : currencies.get(0) + " $" + df.format(pastTotalIncome);
-String pastTotalExpenseFormatted =  pastTotalExpense < 0 ? currencies.get(0) + " -$" + df.format(pastTotalExpense * -1)
-: currencies.get(0) + " $" + df.format(pastTotalExpense);
-
+NumberFormat formatter = NumberFormat.getCurrencyInstance();
 %>
 
 <style>
@@ -64,7 +52,7 @@ table tr {
 		Time Period -
 		<%=period = duration == null ? initialPeriod : period %></h5>
 
-	<h4 class="mb-1"><%=totalFormatted%></h4>
+	<h4 class="mb-1"><%=formatter.format(totalIncome + totalExpense)%></h4>
 	<table class="table table-borderless table-hover">
 		<!-- this is the expense part of the table -->
 		<thead class="pt-1 pb-1 ">
@@ -75,12 +63,12 @@ table tr {
 				<th scope="col">Previous Period</th>
 			</tr>
 		</thead>
-		<thead class="table-light bg-secondary shadow-md">
+		<thead class="table-dark shadow-md">
 			<tr>
 				<th scope="col"></th>
 				<th scope="col">Total Income</th>
-				<th scope="col"><%=totalIncomeFormatted%></th>
-				<th class="text-secondary" scope="col"><%=pastTotalIncome%></th>
+				<th scope="col"><%=formatter.format(totalIncome)%></th>
+				<th scope="col"><%=formatter.format(pastTotalIncome)%></th>
 				<th scope="col"></th>
 			</tr>
 		</thead>
@@ -96,8 +84,8 @@ table tr {
 				<th class="icon" scope="row"><i class="<%=categoryFavIcon%>"
 					style="color: <%=categoryColor%>"></i></th>
 				<td><%=category.getCategoryName()%></td>
-				<td>$<%=df.format(totalByCategories.get(category.getCategoryName()))%></td>
-				<td class="text-secondary">$<%=df.format(pastPeriodTotalByCategories.get(category.getCategoryName()))%></td>
+				<td class=<%=totalByCategories.get(category.getCategoryName()) != 0 ? "fw-b" : ""%>><%=formatter.format(totalByCategories.get(category.getCategoryName()))%></td>
+				<td class="text-secondary"><%=formatter.format(pastPeriodTotalByCategories.get(category.getCategoryName()))%></td>
 				<td class="text-secondary"></td>
 			</tr>
 			<%
@@ -114,12 +102,12 @@ table tr {
 				<th scope="col">Previous Period</th>
 			</tr>
 		</thead>
-		<thead class="table-light shadow-md">
+		<thead class="table-dark shadow-md">
 			<tr>
 				<th scope="col"></th>
 				<th scope="col">Total Expense</th>
-				<th scope="col"><%=totalExpenseFormatted%></th>
-				<th class="text-secondary" scope="col">143134.00</th>
+				<th scope="col"><%=formatter.format(totalExpense)%></th>
+				<th scope="col"><%=formatter.format(pastTotalExpense)%></th>
 				<th scope="col"></th>
 			</tr>
 		</thead>
@@ -137,8 +125,8 @@ table tr {
 				<th class="icon" scope="row"><i class="<%=categoryFavIcon%>"
 					style="color: <%=categoryColor%>"></i></th>
 				<td><%=category.getCategoryName()%></td>
-				<td>-$<%=df.format(totalByCategories.get(category.getCategoryName()) * -1)%></td>
-				<td class="text-secondary">-$<%=df.format(pastPeriodTotalByCategories.get(category.getCategoryName()))%></td>
+				<td class=<%=totalByCategories.get(category.getCategoryName()) != 0 ? "fw-b" : ""%>><%=formatter.format(totalByCategories.get(category.getCategoryName()))%></td>
+				<td class="text-secondary"><%=formatter.format(pastPeriodTotalByCategories.get(category.getCategoryName()))%></td>
 				<td class="text-secondary"></td>
 			</tr>
 			<%
