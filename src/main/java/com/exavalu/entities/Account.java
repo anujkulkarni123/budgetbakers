@@ -11,6 +11,10 @@ public class Account implements Serializable{
 	private int transactionId;
 	private int recordId;
 	private String createdAt;
+	private int accountTypeId;
+	private int currencyId;
+	private String name;
+	
 	public int getAccountId() {
 		return accountId;
 	}
@@ -52,5 +56,24 @@ public class Account implements Serializable{
 	}
 	public void setAccountName(String accountName) {
 		this.accountName = accountName;
+	}
+	public int getAccountTypeId() {
+		return accountTypeId;
+	}
+	public void setAccountTypeId(int accountTypeId) {
+		this.accountTypeId = accountTypeId;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getCurrencyId() {
+		return currencyId;
+	}
+	public void setCurrencyId(int currencyId) {
+		this.currencyId = currencyId;
 	}
 }

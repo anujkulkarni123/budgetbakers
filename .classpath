@@ -13,6 +13,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="/Users/anujkulkarni/Documents/Code/jars/mysql-connector-j-8.3.0.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
@@ -38,5 +39,11 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+=======
+	<classpathentry kind="lib" path="C:/Users/PC/Downloads/dbDriver/mysql-connector-j-8.3.0/mysql-connector-j-8.3.0/mysql-connector-j-8.3.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PC/Downloads/gson-2.10.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PC/Downloads/javax.activation-1.2.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PC/Downloads/javax.mail.jar"/>
+>>>>>>> refs/remotes/master/Bartek
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
