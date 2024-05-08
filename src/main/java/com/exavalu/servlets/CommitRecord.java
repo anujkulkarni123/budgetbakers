@@ -102,11 +102,6 @@ public class CommitRecord extends HttpServlet {
 	        operationSuccess = RecordService.HandleTransfer(userEmail, currencyName, accountId, secondAccountId, amount, propertyValues);
 	    }
 
-	    	    
-	    	    
-	    
-	    
-
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	    Date recordDate = null;
 	    try {
