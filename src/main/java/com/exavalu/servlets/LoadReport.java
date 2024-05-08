@@ -171,6 +171,10 @@ public class LoadReport extends HttpServlet {
 			System.out.println("Sending data for generating Income bar chart");
 			break;
 		case 8:
+			String json8 = TransactionService.getBalance(dateTimes, filterQuery, propertyValues, emailAddress);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(json8);
 			System.out.println("Sending data for generating balance chart");
 			break;
 		}
