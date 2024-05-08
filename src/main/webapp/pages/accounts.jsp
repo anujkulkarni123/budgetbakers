@@ -3,6 +3,7 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="java.util.Map"%>
+<%@ page import="java.text.NumberFormat" %>
 <%@ page import="com.exavalu.entities.Account"%>
 <%@ page import="com.exavalu.entities.AccountType"%>
 <%@ page import="com.exavalu.entities.Currency"%>
@@ -97,6 +98,9 @@
 	request.setAttribute("currencyMap", currencyMap);
 	request.setAttribute("categoryList", categoryList);
 	request.setAttribute("SubCategoryList", SubCategoryList);
+	
+	NumberFormat formatter = NumberFormat.getCurrencyInstance();
+	
 	%>
 	<jsp:include page="components/dashboardHeader.jsp" />
 	<div
@@ -204,7 +208,7 @@
 					<%=accountTypeMap.get(account.getAccountTypeId())%></p>
 				<p
 					style="flex: 3; text-align: right; margin: 0; padding-left: 10px;">
-					<%=account.getAccountBalance()%>
+					<%=formatter.format(account.getAccountBalance())%>
 					<%=currencyMap.get(account.getCurrencyId())%></p>
 			</div>
 			<%
