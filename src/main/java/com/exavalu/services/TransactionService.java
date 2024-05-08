@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -13,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import org.json.JSONObject;
 
 import com.exavalu.entities.Account;
 import com.exavalu.entities.Category;
@@ -25,11 +22,13 @@ import com.exavalu.utilities.DbConnectionProvider;
 import com.google.gson.Gson;
 
 public class TransactionService {
-	
+
 	private static String emailQuery(String email) {
-		String query = " AND EXISTS (SELECT 1 FROM Records WHERE Transactions.accountId = Records.accountId AND Records.userEmail = \"" + email + "\")";
+		String query = " AND EXISTS (SELECT 1 FROM Records WHERE Transactions.accountId = Records.accountId AND Records.userEmail = \""
+				+ email + "\")";
 		return query;
 	}
+
 	// 0 => getTotalIncome, 1 => getTotalExpense
 	public static double getTotalIncome(boolean getTotalExpense, PropertyValues propertyValues, Duration duration,
 			String filterQuery, String emailAddress) {
@@ -50,7 +49,8 @@ public class TransactionService {
 					+ " AND Transactions.createdAt BETWEEN ? AND ?" + caseEmptyFilterQuery + emailQuery(emailAddress);
 		} else {
 			sql = "SELECT * FROM Transactions WHERE Transactions.transactionType = \"" + method + "\""
-					+ " AND createdAt >= DATE_SUB(NOW(), INTERVAL ? DAY)" + caseEmptyFilterQuery + emailQuery(emailAddress);
+					+ " AND createdAt >= DATE_SUB(NOW(), INTERVAL ? DAY)" + caseEmptyFilterQuery
+					+ emailQuery(emailAddress);
 		} // get all queries between today and the specified number of days
 		System.out.println(sql);
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -105,7 +105,7 @@ public class TransactionService {
 
 		if (duration.getLength() == -1) {
 			sql = "SELECT * FROM Transactions WHERE Transactions.category = \"" + category.getCategoryName() + "\" "
-					+ caseEmptyFilterQuery + " " +  emailQuery(emailAddress);
+					+ caseEmptyFilterQuery + " " + emailQuery(emailAddress);
 
 		} // we want to get total income from all time
 		else if (duration.getLength() == -2) {
@@ -113,7 +113,8 @@ public class TransactionService {
 					+ caseEmptyFilterQuery + " AND Transactions.createdAt BETWEEN ? AND ? " + emailQuery(emailAddress);
 		} else {
 			sql = "SELECT * FROM Transactions WHERE Transactions.category = \"" + category.getCategoryName() + "\" "
-					+ caseEmptyFilterQuery + " AND createdAt >= DATE_SUB(NOW(), INTERVAL ? DAY) " + emailQuery(emailAddress);
+					+ caseEmptyFilterQuery + " AND createdAt >= DATE_SUB(NOW(), INTERVAL ? DAY) "
+					+ emailQuery(emailAddress);
 		} // get all queries between today and the specified number of days
 		System.out.println(sql);
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -195,11 +196,11 @@ public class TransactionService {
 		return paymentTypes;
 	}
 
-	public static double getAllAssets(PropertyValues propertyValues) {
+	public static double getAllAssets(PropertyValues propertyValues, String emailAddress) {
 		double allAssets = 0d;
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
-		String sql = "SELECT * FROM Accounts";
+		String sql = "SELECT * FROM Accounts " + emailQuery(emailAddress) ;
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			System.out.println("SQL: " + ps);
 			try (ResultSet rs = ps.executeQuery()) {
@@ -227,23 +228,22 @@ public class TransactionService {
 		Duration previousPeriod = new Duration();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		previousPeriod.setLength(-2);
-		
+
 		if (duration.getLength() == -1) {
 			return duration;
-		}
-		else if (duration.getLength() == -2) {
+		} else if (duration.getLength() == -2) {
 			// the starting day in duration becomes the end date of the previous period
 			previousPeriod.setEndDate(duration.getStartDate());
-			
+
 			// we need to calculate the number of days between these two dates
 			LocalDateTime currentStartDate = LocalDateTime.parse(duration.getStartDate() + "T00:00:00");
 			LocalDateTime currentEndDate = LocalDateTime.parse(duration.getEndDate() + "T00:00:00");
 			long daysBetween = ChronoUnit.DAYS.between(currentStartDate, currentEndDate);
-			// now we need to find how many days back from our current endDate to determine the startDate
+			// now we need to find how many days back from our current endDate to determine
+			// the startDate
 			LocalDateTime dateXDaysBefore = currentStartDate.minusDays(daysBetween);
 			previousPeriod.setStartDate(formatter.format(dateXDaysBefore));
-		} 
-		else {
+		} else {
 			// first we need to find the starting date
 			LocalDateTime today = LocalDateTime.now();
 			LocalDateTime endDateXDaysBefore = today.minusDays(duration.getLength());
@@ -251,19 +251,20 @@ public class TransactionService {
 			LocalDateTime startDateXDaysBefore = endDateXDaysBefore.minusDays(duration.getLength());
 			previousPeriod.setStartDate(formatter.format(startDateXDaysBefore));
 		}
-		
-		System.out.println("current date information: " + duration.getLength() + " " + 
-		duration.getStartDate() + " " + duration.getEndDate());
-		System.out.println("past period date information: " + previousPeriod.getLength() + " " + 
-		previousPeriod.getStartDate() + " " + previousPeriod.getEndDate());
+
+		System.out.println("current date information: " + duration.getLength() + " " + duration.getStartDate() + " "
+				+ duration.getEndDate());
+		System.out.println("past period date information: " + previousPeriod.getLength() + " "
+				+ previousPeriod.getStartDate() + " " + previousPeriod.getEndDate());
 		return previousPeriod;
 	}
 
-	public static String getCumulativeCashFlow(PropertyValues propertyValues, Duration duration, String filterQuery, String emailAddress) {
+	public static String getCumulativeCashFlow(PropertyValues propertyValues, Duration duration, String filterQuery,
+			String emailAddress) {
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		String caseEmptyFilterQuery = filterQuery.isEmpty() ? "" : " AND " + filterQuery;
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
-		double allAssets = getAllAssets(propertyValues);
+		double allAssets = getAllAssets(propertyValues, emailAddress);
 		String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
 
 		Map<String, Double> data = new LinkedHashMap<>();
@@ -274,10 +275,11 @@ public class TransactionService {
 					+ " " + emailQuery(emailAddress) + " ORDER BY createdAt ASC ";
 		} // custom range
 		else if (duration.getLength() == -1) {
-			sql = "SELECT * FROM Transactions ORDER BY createdAt ASC " + caseEmptyFilterQuery + " " + emailQuery(emailAddress);
+			sql = "SELECT * FROM Transactions ORDER BY createdAt ASC " + caseEmptyFilterQuery + " "
+					+ emailQuery(emailAddress);
 		} else {
-			sql = "SELECT * FROM Transactions WHERE createdAt >= DATE_SUB(NOW(), " + "INTERVAL ? DAY) "
-					+ " " + caseEmptyFilterQuery + " " + emailQuery(emailAddress) + " ORDER BY createdAt ASC;";
+			sql = "SELECT * FROM Transactions WHERE createdAt >= DATE_SUB(NOW(), " + "INTERVAL ? DAY) " + " "
+					+ caseEmptyFilterQuery + " " + emailQuery(emailAddress) + " ORDER BY createdAt ASC;";
 		}
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			if (duration.getLength() == -2) {
@@ -297,7 +299,7 @@ public class TransactionService {
 				while (rs.next()) {
 					Double cashFlowAtMoment;
 					if (rs.getString("transactionType").equals("Expense")) {
-						cashFlowAtMoment =- allAssets - rs.getDouble("transactionAmount");
+						cashFlowAtMoment = -allAssets - rs.getDouble("transactionAmount");
 					} else {
 						cashFlowAtMoment = allAssets + rs.getDouble("transactionAmount");
 					}
@@ -323,11 +325,12 @@ public class TransactionService {
 		return json;
 	}
 
-	public static String getCashFlow(PropertyValues propertyValues, Duration duration, String filterQuery, String emailAddress) {
+	public static String getCashFlow(PropertyValues propertyValues, Duration duration, String filterQuery,
+			String emailAddress) {
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		String caseEmptyFilterQuery = filterQuery.isEmpty() ? "" : " AND " + filterQuery;
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
-		double allAssets = getAllAssets(propertyValues);
+		double allAssets = getAllAssets(propertyValues, emailAddress);
 		String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
 
 		Map<String, Double> data = new LinkedHashMap<>();
@@ -335,11 +338,12 @@ public class TransactionService {
 
 		String sql;
 		if (duration.getLength() == -2) {
-			sql = "SELECT * FROM Transactions WHERE Transactions.createdAt BETWEEN ? AND ? " + caseEmptyFilterQuery + emailQuery(emailAddress)
-					+ " ORDER BY createdAt ASC AND ";
+			sql = "SELECT * FROM Transactions WHERE Transactions.createdAt BETWEEN ? AND ? " + caseEmptyFilterQuery
+					+ emailQuery(emailAddress) + " ORDER BY createdAt ASC AND ";
 		} // custom range
 		else if (duration.getLength() == -1) {
-			sql = "SELECT * FROM Transactions WHERE " + caseEmptyFilterQuery + " " + emailQuery(emailAddress) + " ORDER BY createdAt ASC ";
+			sql = "SELECT * FROM Transactions WHERE " + caseEmptyFilterQuery + " " + emailQuery(emailAddress)
+					+ " ORDER BY createdAt ASC ";
 		} else {
 			sql = "SELECT * FROM Transactions WHERE createdAt >= DATE_SUB(NOW(), " + "INTERVAL ? DAY) "
 					+ caseEmptyFilterQuery + " " + emailQuery(emailAddress) + " ORDER BY createdAt ASC;";
@@ -402,8 +406,8 @@ public class TransactionService {
 
 		if (duration.getLength() == -2) {
 			sql = "SELECT * FROM Transactions WHERE Transactions.transactionType = \"" + method + "\""
-					+ " AND Transactions.createdAt BETWEEN ? AND ? " + caseEmptyFilterQuery
-					+ " " + emailQuery(emailAddress) + "ORDER BY createdAt ASC;";
+					+ " AND Transactions.createdAt BETWEEN ? AND ? " + caseEmptyFilterQuery + " "
+					+ emailQuery(emailAddress) + "ORDER BY createdAt ASC;";
 		} // custom range
 		else if (duration.getLength() == -1) {
 			sql = "SELECT * FROM Transactions WHERE Transactions.transactionType = \"" + method + "\"" + " "
@@ -460,20 +464,89 @@ public class TransactionService {
 		return json;
 	}
 
-	public static JSONObject getBalance(Duration duration, String filterQuery, PropertyValues propertyValues) {
+	private static double getBalanceOnDay(String day, String emailAddress, PropertyValues propertyValues,
+			String filterQuery) {
+		String caseEmptyFilterQuery = filterQuery.isEmpty() ? "" : " AND " + filterQuery;
+		String sql = "SELECT * FROM Transactions WHERE DATE(createdAt) = '?' " + emailQuery(emailAddress) 
+				+ caseEmptyFilterQuery;
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+		double moneyflow = 0;
+		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, day);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					moneyflow += rs.getDouble("transactionAmount");
+				}
+			}
+		} catch (SQLException e) {
+			// Log and handle the exception
+			e.printStackTrace();
+		} finally {
+			// Close the connection
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return moneyflow;
+	}
+
+	public static String getBalance(Duration duration, String filterQuery, PropertyValues propertyValues,
+			String emailAddress) {
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 		String caseEmptyFilterQuery = filterQuery.isEmpty() ? "" : " AND " + filterQuery;
 		Map<String, Double> data = new LinkedHashMap<>();
 		String sql;
+
 		if (duration.getLength() == -2) {
-
+			sql = "SELECT * FROM Transactions WHERE Transactions.createdAt BETWEEN ? AND ? " + caseEmptyFilterQuery
+					+ " " + emailQuery(emailAddress) + "ORDER BY createdAt ASC;";
 		} else if (duration.getLength() == -1) {
-
+			sql = "SELECT * FROM Transactions WHERE Transactions.transactionType IN ('Expense', 'Income') "
+					+ caseEmptyFilterQuery + " " + emailQuery(emailAddress) + " ORDER BY createdAt ASC;";
 		} else {
-
+			sql = "SELECT * FROM Transactions WHERE createdAt >= DATE_SUB(NOW(), INTERVAL ? DAY) "
+					+ caseEmptyFilterQuery + " " + emailQuery(emailAddress) + " ORDER BY createdAt ASC;";
 		}
-		return null;
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			if (duration.getLength() == -2) {
+				String startTime = duration.getStartDate() + " 00:00:00";
+				String endTime = duration.getEndDate() + " 00:00:00";
+				System.out.println("start: " + startTime + " end: " + endTime);
+				Timestamp startTimestamp = Timestamp.valueOf(startTime);
+				Timestamp endTimestamp = Timestamp.valueOf(endTime);
+				ps.setTimestamp(1, startTimestamp);
+				ps.setTimestamp(2, endTimestamp);
+			} else if (duration.getLength() != -1) {
+				ps.setInt(1, duration.getLength());
+			}
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					data.put(rs.getString("createdAt"),
+							getBalanceOnDay(rs.getString("createdAt"), emailAddress, propertyValues, filterQuery));
+				}
+			}
+		} catch (SQLException e) {
+			// Log and handle the exception
+			e.printStackTrace();
+		} finally {
+			// Close the connection
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		Gson gson = new Gson();
+		String json = gson.toJson(data, LinkedHashMap.class);
+		return json;
 	}
 
 	public static String getCumulativeIncome(boolean getCumulativeExpense, PropertyValues propertyValues,
@@ -494,8 +567,8 @@ public class TransactionService {
 					+ caseEmptyFilterQuery + " " + emailQuery(emailAddress) + " ORDER BY createdAt ASC;";
 		} else {
 			sql = "SELECT * FROM Transactions WHERE Transactions.transactionType = \"" + method + "\" "
-					+ caseEmptyFilterQuery
-					+ " AND createdAt >= DATE_SUB(NOW(), INTERVAL ? DAY) " + emailQuery(emailAddress) + " ORDER BY createdAt ASC;";
+					+ caseEmptyFilterQuery + " AND createdAt >= DATE_SUB(NOW(), INTERVAL ? DAY) "
+					+ emailQuery(emailAddress) + " ORDER BY createdAt ASC;";
 		}
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			if (duration.getLength() == -2) {
