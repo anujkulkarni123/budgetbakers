@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -310,7 +311,7 @@ public class RecordsService {
             PreparedStatement preparedStatement = con.prepareStatement(insertSQL);
             preparedStatement.setInt(1, accountId);
             preparedStatement.setDouble(2, amount);
-            preparedStatement.setDate(3, recordDate);
+            preparedStatement.setDate(3, (java.sql.Date) recordDate);
             preparedStatement.setInt(4, currencyName);
             preparedStatement.setInt(5, type);
             preparedStatement.setInt(6, secondAccountId);
