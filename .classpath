@@ -1,42 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v9.0"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v9.0">
-		<attributes>
-			<attribute name="owner.project.facets" value="jst.web"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="/Users/anujkulkarni/Documents/Code/jars/mysql-connector-j-8.3.0.jar">
+	<classpathentry kind="lib" path="/Users/anujkulkarni/Documents/Code/eclipse-worskspace/ecplipse-workspace-ver2/budgetbaker/src/lib/activation-1.1.1.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/anujkulkarni/Documents/Code/jars/javax.mail.jar">
+	<classpathentry kind="lib" path="/Users/anujkulkarni/Documents/Code/eclipse-worskspace/ecplipse-workspace-ver2/budgetbaker/src/lib/gson-2.10.1.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/anujkulkarni/Documents/Code/jars/activation-1.1.1.jar">
+	<classpathentry kind="lib" path="/Users/anujkulkarni/Documents/Code/eclipse-worskspace/ecplipse-workspace-ver2/budgetbaker/src/lib/javax.activation-api-1.2.0-javadoc.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/anujkulkarni/Downloads/gson-2.10.1.jar">
+	<classpathentry kind="lib" path="/Users/anujkulkarni/Documents/Code/eclipse-worskspace/ecplipse-workspace-ver2/budgetbaker/src/lib/javax.mail.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/anujkulkarni/Documents/Code/jars/json-20140107.jar">
+	<classpathentry kind="lib" path="/Users/anujkulkarni/Documents/Code/eclipse-worskspace/ecplipse-workspace-ver2/budgetbaker/src/lib/json-20140107.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path="build/classes"/>
+	<classpathentry kind="lib" path="/Users/anujkulkarni/Documents/Code/eclipse-worskspace/ecplipse-workspace-ver2/budgetbaker/src/lib/mysql-connector-j-8.3.0.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

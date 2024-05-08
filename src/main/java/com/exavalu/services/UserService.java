@@ -4,11 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
 import java.util.ArrayList;
 
+import com.exavalu.entities.Category;
+import com.exavalu.entities.Duration;
 import com.exavalu.entities.Menu;
+import com.exavalu.entities.Report;
 import com.exavalu.entities.User;
 import com.exavalu.pojos.PropertyValues;
 import com.exavalu.utilities.DbConnectionProvider;
@@ -100,6 +106,11 @@ public class UserService {
             System.out.println("Unable to create database connection.");
             return user; // Cannot proceed without a connection
         }
+        String hashedPassword = "";
+        if (password != null) {
+	        hashedPassword = MD5Hash.encode(password);
+	        // Proceed with using hashedPassword
+	    }
        
         // Define the SQL query
         String sql = "SELECT emailAddress, firstname, lastname, roleid, password, serialNumber, status, imagePath FROM Users "
@@ -107,7 +118,7 @@ public class UserService {
      // Attempt to execute the query
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, emailAddress);
-            ps.setString(2, password);
+            ps.setString(2, hashedPassword);
             System.out.println("SQL: " + ps);
 
             // Execute the query and process the results
@@ -148,10 +159,9 @@ public class UserService {
 		 DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 	     Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 	     
-	     System.out.println("reached");
-	     
-		String sql = "SELECT * FROM MENU INNER JOIN MENUROLES ON MENU.menuId = MENUROLES.menuId WHERE roleid = ? ";
+		String sql = "SELECT * FROM MENU INNER JOIN MENUROLES ON MENU.menuid = MENUROLES.menuid WHERE roleid = ? ";
 		ArrayList<Menu> menuList = new ArrayList<>();
+		System.out.println(roleId);
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setInt(1, roleId);
 			try (ResultSet rs = ps.executeQuery()) {
@@ -365,4 +375,74 @@ public class UserService {
 			}
 		}
 	}
+	
+	public static ArrayList<Category> getCategories(PropertyValues propertyValues) {
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		ArrayList<Category> categories = new ArrayList<>();
+		String sql = "SELECT * FROM Categories ORDER BY categoryId";
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			System.out.println("SQL: " + ps);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Category category = new Category();
+					category.setCategoryIcon(rs.getString("categoryIcon"));
+					category.setCategoryName(rs.getString("categoryName"));
+					category.setCategoryId(rs.getInt("categoryId"));
+					category.setCategoryColor(rs.getString("categoryColor"));
+					categories.add(category);
+				}
+			}
+		} catch (SQLException e) {
+			// Log and handle the exception
+			e.printStackTrace();
+			// Return false as the validation was not successful
+			return categories;
+		} finally {
+			// Close the connection
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return categories;
+	}
+	
+	public static ArrayList<Report> getReports(PropertyValues propertyValues) {
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		ArrayList<Report> reports = new ArrayList<>();
+		String sql = "SELECT * FROM Reports ORDER BY analysisIndex";
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			System.out.println("SQL: " + ps);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Report report = new Report();
+					report.setAnalysisName(rs.getString("analysisName"));
+					report.setAnalysisValue(rs.getInt("analysisIndex"));
+					reports.add(report);
+				}
+			}
+		} catch (SQLException e) {
+			// Log and handle the exception
+			e.printStackTrace();
+			// Return false as the validation was not successful
+			return reports;
+		} finally {
+			// Close the connection
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return reports;
+	}
+	
 }
+

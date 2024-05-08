@@ -1,10 +1,18 @@
 
 <%@ page import="java.util.List"%>
-<%@ page import="java.net.URLEncoder" %>
-<%@ page import="com.google.gson.Gson" %>
+<%@ page import="java.net.URLEncoder"%>
+<%@ page import="com.google.gson.Gson"%>
 <%@ page import="java.util.Map"%>
 <%@ page import="com.exavalu.entities.Card"%>
-
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.Map"%>
+<%@ page import="com.exavalu.entities.Account"%>
+<%@ page import="com.exavalu.entities.AccountType"%>
+<%@ page import="com.exavalu.entities.Currency"%>
+<%@ page import="com.exavalu.entities.User"%>
+<%@ page import="com.exavalu.entities.Category"%>
+<%@ page import="com.exavalu.entities.SubCategory"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,33 +35,70 @@
 </head>
 <body>
 	<%
-	    Gson gson = new Gson();
-	%>
+	Gson gson = new Gson();
 	
+	User currentUser = (User) session.getAttribute("USER");
+	System.out.println("currentUser");
+	System.out.println(currentUser.getEmailAddress());
+	ArrayList<Account> accounts = (ArrayList<Account>) session.getAttribute("ACCOUNTS");
+	ArrayList<AccountType> accountTypeList = (ArrayList<AccountType>) session.getAttribute("ACCOUNTTYPES");
+	ArrayList<Currency> currencyList = (ArrayList<Currency>) session.getAttribute("CURRENCIES");
+	ArrayList<Category> categoryList = (ArrayList<Category>) session.getAttribute("CATEGORIES");
+	ArrayList<SubCategory> SubCategoryList = (ArrayList<SubCategory>) session.getAttribute("SUBCATEGORIES");
+	System.out.println("category List");
+	System.out.println(categoryList);
+	System.out.println(SubCategoryList);
+	Map<Integer, String> accountTypeMap = new HashMap<>();
+	Map<Integer, String> currencyMap = new HashMap<>();
+
+	for (AccountType accountType : accountTypeList) {
+		accountTypeMap.put(accountType.getId(), accountType.getType());
+	}
+
+	for (Currency currency : currencyList) {
+		currencyMap.put(currency.getId(), currency.getCurrencyName());
+	}
+	System.out.println("CHECKER");
+	System.out.println(accounts);
+	System.out.println(accountTypeList);
+	request.setAttribute("accounts", accounts);
+    request.setAttribute("accountTypeList", accountTypeList);
+    request.setAttribute("currencyList", currencyList);
+    request.setAttribute("accountTypeMap", accountTypeMap);
+    request.setAttribute("currencyMap", currencyMap);
+    request.setAttribute("categoryList", categoryList);
+    request.setAttribute("SubCategoryList", SubCategoryList);
+    
+	%>
+
+
 	<%@ include file="components/dashboardHeader.jsp"%>
 
 	<div class="content">
 		<div class="account-container">Add Accounts PlaceHolder</div>
 
 		<div class="container mt-4">
-			<div class="row" id="cardRow">
-				<!-- This row will contain all the cards -->
-				  <%
-				    List<Card> cards = (List<Card>) request.getAttribute("CARDS");
-				    for (Card card : cards) {
-				    %>
-				        <div class="col-lg-4 col-md-6">
-				            <div class="card m-2" id="card"> <!-- Ensuring unique ID -->
-				                <h5 class="card-title"><%=card.getName()%></h5>
-				                <hr>
-				                <div class="card-body">
-				                    <%=card.getJson()%>
-				                </div>
-				            </div>
-				        </div>
-				    <%
-				    }
-				    %>
+			<div class="row">
+				<div class="row" id="cardRow">
+					<!-- This row will contain all the cards -->
+					<%-- <%
+					    List<Card> cards = (List<Card>) request.getAttribute("CARDS");
+					    for (Card card : cards) {
+					    %>
+					        <div class="col-lg-4 col-md-6">
+					            <div class="card m-2" id="card"> <!-- Ensuring unique ID -->
+					                <h5 class="card-title"><%=card.getName()%></h5>
+					                <hr>
+					                <div class="card-body">
+					                    <%=card.getJson()%>
+					                </div>
+					            </div>
+					        </div>
+					    <%
+					    }
+					    %> --%>
+				</div>
+
 				<div class="col-12">
 					<!-- Add Card Placeholder -->
 					<div class="card m-2 add-card" id="addCard">
@@ -61,63 +106,61 @@
 							class="card-body d-flex justify-content-center align-items-center flex-column">
 							<!-- Plus icon button (Bootstrap icon can be used if available) -->
 							<button type="button"
-								class="btn btn-outline-primary rounded-circle mb-2 add-card-button"
-								data-bs-toggle="modal" data-bs-target="#addCardModal">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-									fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-				                    <path
-										d="M8 12a.5.5 0 000-1H3.5a.5.5 0 000 1H8zm-3.5-3a.5.5 0 010-1 .5.5 0 010 1zm3.5 3a.5.5 0 001-1V3.5a.5.5 0 00-1 0v7.5zm0-10a.5.5 0 011 0v7.5a.5.5 0 01-1 0V3.5z" />
-				                </svg>
-							</button>
+						        class="btn btn-outline-primary rounded-circle mb-2 add-card-button"
+						        data-bs-toggle="modal" data-bs-target="#addCardModal">
+						    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+						         fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+						        <path d="M8 12a.5.5 0 000-1H3.5a.5.5 0 000 1H8zm-3.5-3a.5.5 0 010-1 .5.5 0 010 1zm3.5 3a.5.5 0 001-1V3.5a.5.5 0 00-1 0v7.5zm0-10a.5.5 0 011 0v7.5a.5.5 0 01-1 0V3.5z" />
+						    </svg>
+						</button>
 							<!-- Text for the button -->
 							<span class="add-card-text">Add Card</span>
 						</div>
 					</div>
 				</div>
+			</div>
 
-				<!-- Modal -->
-				<div class="modal fade" id="addCardModal" tabindex="-1"
-					aria-labelledby="addCardModalLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="addCardModalLabel">Add New Card</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal"
-									aria-label="Close"></button>
-							</div>
-							<div class="modal-body">
-							    <%
+			<!-- Modal -->
+			<div class="modal fade" id="addCardModal" tabindex="-1"
+				aria-labelledby="addCardModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="addCardModalLabel">Add New Card</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<%
 							    Map<String, List<Card>> cardsByType = (Map<String, List<Card>>) request.getAttribute("CARDS_BY_TYPE");
 							    for (Map.Entry<String, List<Card>> entry : cardsByType.entrySet()) {
 							        String type = entry.getKey();
 							        List<Card> cardsForType = entry.getValue();
-							    %>
-							    <div class="mb-4">
-							        <h6 class="text-uppercase"><%=type%></h6>
-							        <%
+							%>
+							<div class="mb-4">
+								<h6 class="text-uppercase"><%=type%></h6>
+								<%
 							        for (Card card : cardsForType) {
-							        %>
-							        <div class="card m-2" onClick="addCard('<%= URLEncoder.encode(gson.toJson(card), "UTF-8") %>', event)">
-									    <h5 class="card-title"><%= card.getName() %></h5>
-									    <hr>
-									    <div class="card-body ">
-									        <%= card.getJson() %>
-									    </div>
-									</div>
-							        <%
+							    %>
+								<!-- Example of a card in the modal with the onClick handler -->
+								<div class="card m-2" onClick="addCard('<%= URLEncoder.encode(gson.toJson(card), "UTF-8") %>', event)">
+								    <h5 class="card-title"><%= card.getName() %></h5>
+								    <hr>
+								    <div class="card-body">
+								        <%= card.getJson() %>
+								    </div>
+								</div>
+								<%
 							        }
-							        %>
-							    </div>
-							    <%
-							    }
 							    %>
 							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary"
-									data-bs-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary">Save
-									Changes</button>
-							</div>
+							<%
+							    }
+							%>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-bs-dismiss="modal">Close</button>
 						</div>
 					</div>
 				</div>

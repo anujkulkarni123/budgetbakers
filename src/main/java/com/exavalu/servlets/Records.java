@@ -47,28 +47,7 @@ public class Records extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
-		ServletContext context = getServletContext();
-		String fullPath = context.getRealPath("/WEB-INF/config.properties");
-		Properties properties = new Properties();
-		PropertyValues propertyValues = PropertyValues.getInstance();
-
-		try (InputStream input = new FileInputStream(fullPath)) {
-			properties.load(input);
-			propertyValues.setDbname(properties.getProperty("dbname"));
-			propertyValues.setPassword(properties.getProperty("password"));
-			propertyValues.setUrl(properties.getProperty("url"));
-			propertyValues.setUser(properties.getProperty("user"));
-			propertyValues.setEmailAddress(properties.getProperty("emailAddress"));
-			propertyValues.setEmailPassword(properties.getProperty("emailPassword"));
-		} catch (IOException e) {
-			e.printStackTrace(); // Handle the exception appropriately
-		}
-		
-		
-//		List<Record> records = RecordsService.getRecords("", null, propertyValues);
-//		request.setAttribute("RECORDS", records);
 		
 		request.getRequestDispatcher("pages/viewRecords.jsp").forward(request, response);
 	}

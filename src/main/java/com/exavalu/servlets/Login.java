@@ -14,12 +14,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.exavalu.entities.Card;
+
+import javax.servlet.http.HttpSession;
+
+import com.exavalu.entities.Account;
+import com.exavalu.entities.AccountType;
+import com.exavalu.entities.Currency;
 import com.exavalu.entities.Menu;
 import com.exavalu.entities.User;
+import com.exavalu.entities.Category;
+import com.exavalu.entities.SubCategory;
 import com.exavalu.pojos.CustomMessage;
 import com.exavalu.pojos.PropertyValues;
 import com.exavalu.services.CardService;
+import com.exavalu.services.AccountService;
+import com.exavalu.services.CategoryService;
+import com.exavalu.services.CurrencyService;
 import com.exavalu.services.UserService;
 
 /**
@@ -88,18 +100,44 @@ public class Login extends HttpServlet {
 					e.printStackTrace(); // Handle the exception appropriately
 				}
 				
-				User user = UserService.validateUser(emailAddress, password, propertyValues);
-				
+
+				User user = UserService.getUser(emailAddress, password, propertyValues);
+
+				System.out.println("USER");
+				System.out.println(user);
 
 				if (user != null) {
+					
 					List<Card> cards = CardService.getCards(propertyValues);
-					Map<String, List<Card>> cardsByType = cards.stream()
-						    .collect(Collectors.groupingBy(Card::getType));
+					Map<String, List<Card>> cardsByType = cards.stream().collect(Collectors.groupingBy(Card::getType));
 					request.setAttribute("CARDS_BY_TYPE", cardsByType);
 			        request.setAttribute("CARDS", cards);
-					ArrayList<Menu> menuItems = UserService.getMenu(user.getRoleId(), propertyValues);
+					
+			        ArrayList<Menu> menuItems = UserService.getMenu(user.getRoleId(), propertyValues);
 					request.getSession().setAttribute("USER", user);
 					request.getSession().setAttribute("MENULIST", menuItems);
+					
+					ArrayList<AccountType> accountTypes = AccountService.getAccountTypes(propertyValues);
+					ArrayList<Account> accounts = AccountService.getAccounts(user.getEmailAddress(), propertyValues);
+					ArrayList<Currency> currencies = CurrencyService.getCurrencies(propertyValues);
+					
+					System.out.println(accountTypes);
+					System.out.println(accounts);
+					System.out.println(currencies);
+					
+					request.getSession().setAttribute("ACCOUNTTYPES", accountTypes);
+					request.getSession().setAttribute("ACCOUNTS", accounts);
+					request.getSession().setAttribute("CURRENCIES", currencies);
+
+					ArrayList<Category> categoryList = CategoryService.getCategories(propertyValues);
+					ArrayList<SubCategory> subCategoryList = CategoryService.getSubCategories(propertyValues);
+					System.out.println("CATGEGORIES");
+					System.out.println(categoryList);
+					System.out.println(subCategoryList);
+					
+					request.getSession().setAttribute("CATEGORIES", categoryList);
+					request.getSession().setAttribute("SUBCATEGORIES", subCategoryList);
+
 					request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
 				} else {
 					//go back to login page with error message

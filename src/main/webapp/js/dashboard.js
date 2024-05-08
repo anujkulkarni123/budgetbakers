@@ -73,22 +73,27 @@ function enableSortable() {
     $("#cardRow").disableSelection();
 }
 
-
-window.selectedCards = [];
+window.selectedCards = window.selectedCards || [];
 
 function addCard(encodedCardJson, evt) {
+	
     if (evt) {
-        evt.preventDefault();  // Prevent default action of the event (e.g., form submission)
-        evt.stopPropagation(); // Stop the event from propagating further
+        evt.preventDefault();
+        evt.stopPropagation();
     }
 
-    var decodedJson = decodeURIComponent(encodedCardJson);
+    var decodedJson = decodeURIComponent(encodedCardJson.replace(/\+/g, ' '));
     var card = safeParseJSON(decodedJson);
-    if (!card) return; // Exit if JSON parsing fails
+	console.log("Clicked to add card:", card);
+    if (!card) return;
 
     if (!window.selectedCards.some(e => e.name === card.name)) {
         window.selectedCards.push(card);
-        renderCards();
+        evt.currentTarget.classList.add('selected');  // Add a 'selected' class to the card
+        renderSelectedCards();
+    } else {
+        console.log("Card already selected");
+        evt.currentTarget.classList.add('already-selected');  // Different class for already selected cards
     }
 }
 
@@ -102,26 +107,21 @@ function safeParseJSON(json) {
     }
 }
 
-function renderCards() {
+function renderSelectedCards() {
     const cardContainer = document.getElementById('cardRow');
-    cardContainer.innerHTML = ''; // Clear the container to prepare for new content
+    cardContainer.innerHTML = ''; // Clear the container before adding new cards
 
-    // Using requestAnimationFrame to manage rendering updates
-    window.selectedCards.forEach((card, index) => {
-        requestAnimationFrame(() => {
-            const cardElement = document.createElement('div');
-            cardElement.className = 'col-lg-4 col-md-6';
-            cardElement.innerHTML = `
-                <div class="card m-2">
-                    <h5 class="card-title">${card.name}</h5>
-                    <hr>
-                    <div class="card-body">
-                        ${card.json}
-                    </div>
-                </div>
-            `;
-            cardContainer.appendChild(cardElement);
-        });
+    window.selectedCards.forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.className = 'col-lg-4 col-md-6';
+        cardElement.innerHTML = `
+            <div class="card m-2">
+                <h5 class="card-title">${card.name}</h5>
+                <hr>
+                <div class="card-body">${card.json}</div>
+            </div>
+        `;
+        cardContainer.appendChild(cardElement);
     });
 }
 

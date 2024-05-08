@@ -61,12 +61,10 @@ public class ViewDashboard extends HttpServlet {
         }
 
         // Get cards from CardsService
-
         List<Card> cards = CardService.getCards(propertyValues);
-        request.setAttribute("CARDS", cards);
-        Map<String, List<Card>> cardsByType = cards.stream()
-			    .collect(Collectors.groupingBy(Card::getType));
+		Map<String, List<Card>> cardsByType = cards.stream().collect(Collectors.groupingBy(Card::getType));
 		request.setAttribute("CARDS_BY_TYPE", cardsByType);
+        request.setAttribute("CARDS", cards);
 
         // Forward to JSP
         request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);

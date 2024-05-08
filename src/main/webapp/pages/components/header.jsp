@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <header class="transparent-header">
+    <header class="header">
         <span class="header-label" style="color:white; font-size: 20px;">budgetbakers</span>
     </header>
 </body>
