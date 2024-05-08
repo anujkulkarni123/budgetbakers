@@ -1,4 +1,16 @@
 <%@ page import="java.util.ArrayList"%>
+<%@ page import="com.exavalu.entities.Category"%>
+<%@ page import="com.exavalu.entities.Account"%>
+<%@ page import="com.exavalu.entities.RecordState"%>
+
+<%
+ArrayList<String> sidebarCurrencies = (ArrayList<String>) request.getAttribute("SIDEBAR_CURRENCIES");
+ArrayList<Category> sidebarCategories = (ArrayList<Category>) request.getAttribute("SIDEBAR_CATEGORIES");
+ArrayList<String> sidebarPaymentTypes = (ArrayList<String>) request.getAttribute("SIDEBAR_PAYMENTTYPES");
+ArrayList<RecordState> sidebarRecordStates = (ArrayList<RecordState>) request.getAttribute("SIDEBAR_RECORDSTATES");
+ArrayList<String> sidebarRecordTypes = (ArrayList<String>) request.getAttribute("SIDEBAR_RECORDTYPES");
+ArrayList<Account> sidebarAccounts = (ArrayList<Account>) request.getAttribute("SIDEBAR_ACCOUNTS");
+%>
 
 <style>
 /* Secondary color class */
@@ -23,17 +35,13 @@
 </style>
 <div class="card fs-6" style="min-height: 100%;">
 	<div class="card-body">
-		<h2 class="mt-3">Analytics</h2>
-
-		<br> <br> <input type="text" class="form-control form-input"
-			placeholder="Search anything..."> <label
-			style="margin-top: 5px; font-size: 14px;">Filters</label>
+		<h2 class="mt-3 mb-3">Analytics</h2>
 		<div class="filterContainer ">
-			<div class="d-flex justify-content-around">
+			<div class="d-flex justify-content-around mb-2">
 				<button class="btn btn-success login-button" id="applyFiltersButton"
-					onClick=>Apply Filters</button>
+					onClick="applyFilters()">Apply Filters</button>
 				<button class="btn btn-outline-primary btn-md login-button"
-					id="clearFiltersButton">Clear Filters</button>
+					id="clearFiltersButton" onClick="clearFilters()">Clear Filters</button>
 			</div>
 			<div class="accordion mt-4" id="accordionExample">
 				<div class="accordion-item">
@@ -44,7 +52,25 @@
 							Accounts</button>
 					</h2>
 					<div id="collapseOne" class="accordion-collapse collapse show">
-						<div class="accordion-body">Accounts</div>
+						<div class="accordion-body">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" value="all"
+									checked id="flexCheckDefault"> <label
+									class="form-check-label" for="flexCheckDefault"> All</label>
+							</div>
+							<%
+							for (Account account : sidebarAccounts) {
+							%>
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox"
+									value="<%=account.getAccountId()%>" id="flexCheckDefault">
+								<label class="form-check-label" for="flexCheckDefault">
+									<%=account.getAccountName()%></label>
+							</div>
+							<%
+							}
+							%>
+						</div>
 					</div>
 				</div>
 				<div class="accordion-item">
@@ -55,7 +81,25 @@
 							Categories</button>
 					</h2>
 					<div id="collapseTwo" class="accordion-collapse collapse">
-						<div class="accordion-body">Categories</div>
+						<div class="accordion-body">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" value="all"
+									checked id="flexCheckDefault"> <label
+									class="form-check-label" for="flexCheckDefault"> All</label>
+							</div>
+							<%
+							for (Category category : sidebarCategories) {
+							%>
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox"
+									value="<%=category.getCategoryName()%>" id="flexCheckDefault">
+								<label class="form-check-label" for="flexCheckDefault">
+									<%=category.getCategoryName()%></label>
+							</div>
+							<%
+							}
+							%>
+						</div>
 					</div>
 				</div>
 				<div class="accordion-item">
@@ -68,15 +112,21 @@
 					<div id="collapseThree" class="accordion-collapse collapse">
 						<div class="accordion-body">
 							<div class="form-check">
-								<input class="form-check-input" type="checkbox" value="CAD"
-									id="flexCheckDefault"> <label class="form-check-label"
-									for="flexCheckDefault"> CAD</label>
+								<input class="form-check-input" type="checkbox" value="all"
+									id="flexCheckDefault" checked> <label
+									class="form-check-label" for="flexCheckDefault"> All</label>
 							</div>
+							<%
+							for (String currency : sidebarCurrencies) {
+							%>
 							<div class="form-check">
-								<input class="form-check-input" type="checkbox" value="USD"
-									id="flexCheckDefault"> <label class="form-check-label"
-									for="flexCheckDefault"> USD</label>
+								<input class="form-check-input" type="checkbox"
+									value="<%=currency%>" id="flexCheckDefault"> <label
+									class="form-check-label" for="flexCheckDefault"> <%=currency%></label>
 							</div>
+							<%
+							}
+							%>
 						</div>
 					</div>
 				</div>
@@ -85,10 +135,28 @@
 						<button class="accordion-button" type="button"
 							data-bs-toggle="collapse" data-bs-target="#collapseFour"
 							aria-expanded="true" aria-controls="#collapseFour">
-							Record Types</button>
+							Record State</button>
 					</h2>
 					<div id="collapseFour" class="accordion-collapse collapse">
-						<div class="accordion-body">Record Types</div>
+						<div class="accordion-body">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" value="all"
+									checked id="flexCheckDefault"> <label
+									class="form-check-label" for="flexCheckDefault"> All</label>
+							</div>
+							<%
+							for (RecordState recordState : sidebarRecordStates) {
+							%>
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox"
+									value="<%=recordState.getId()%>" id="flexCheckDefault">
+								<label class="form-check-label" for="flexCheckDefault">
+									<%=recordState.getRecordType()%></label>
+							</div>
+							<%
+							}
+							%>
+						</div>
 					</div>
 				</div>
 				<div class="accordion-item">
@@ -99,7 +167,24 @@
 							Payment Types</button>
 					</h2>
 					<div id="collapseFive" class="accordion-collapse collapse">
-						<div class="accordion-body">Payment Types</div>
+						<div class="accordion-body">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" value="all"
+									id="flexCheckDefault" checked> <label
+									class="form-check-label" for="flexCheckDefault"> All</label>
+							</div>
+							<%
+							for (String paymentType : sidebarPaymentTypes) {
+							%>
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox"
+									value="<%=paymentType%>" id="flexCheckDefault"> <label
+									class="form-check-label" for="flexCheckDefault"> <%=paymentType%></label>
+							</div>
+							<%
+							}
+							%>
+						</div>
 					</div>
 				</div>
 				<div class="accordion-item">
@@ -107,14 +192,30 @@
 						<button class="accordion-button" type="button"
 							data-bs-toggle="collapse" data-bs-target="#collapseSix"
 							aria-expanded="true" aria-controls="#collapseSix">
-							Record States</button>
+							Record Types</button>
 					</h2>
 					<div id="collapseSix" class="accordion-collapse collapse">
-						<div class="accordion-body">Record States</div>
+						<div class="accordion-body">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" value="all"
+									checked id="flexCheckDefault"> <label
+									class="form-check-label" for="flexCheckDefault"> All</label>
+							</div>
+							<%
+							for (String recordType : sidebarRecordTypes) {
+							%>
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox"
+									value="<%=recordType%>" id="flexCheckDefault"> <label
+									class="form-check-label" for="flexCheckDefault"> <%=recordType%></label>
+							</div>
+							<%
+							}
+							%>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
