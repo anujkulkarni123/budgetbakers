@@ -742,4 +742,35 @@ public class TransactionService {
 		}
 		return filterHeaders;
 	}
+	public static ArrayList<Currency> getCurrencies (PropertyValues propertyValues) {
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		ArrayList<Currency> currencies = new ArrayList<>();
+		String sql = "SELECT * FROM Currencies";
+		try (PreparedStatement ps = con.prepareStatement(sql) ) {
+			try (ResultSet rs = ps.executeQuery()) {
+				System.out.println("sql: " + ps);
+				while (rs.next()) {
+					Currency currency = new Currency();
+					currency.setConversionRate(rs.getFloat("conversionRate"));
+					currency.setCurrencyName(rs.getString("currencyName"));
+					currency.setId(rs.getInt("id"));
+					currencies.add(currency);
+				}
+			}
+		} catch (SQLException e) {
+			// Log and handle the exception
+			e.printStackTrace();
+		} finally {
+			// Close the connection
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return currencies;
+	}
 }
