@@ -1,4 +1,5 @@
 <%@ page import="com.exavalu.entities.Category"%>
+<%@ page import="com.exavalu.entities.Currency"%>
 <%@ page import="com.exavalu.entities.Duration"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.Hashtable"%>
@@ -13,7 +14,7 @@ double totalIncome = (Double) request.getAttribute("TOTAL_INCOME");
 double totalExpense = (Double) request.getAttribute("TOTAL_EXPENSE");
 String initialPeriod = (String) request.getAttribute("INITIAL_DURATION");
 Duration duration = (Duration) request.getAttribute("DURATION");
-ArrayList<String> currencies = (ArrayList<String>) request.getAttribute("CURRENCIES");
+ArrayList<Currency> currencies = (ArrayList<Currency>) request.getAttribute("CURRENCIES");
 
 // past period
 double pastTotalIncome = (Double) request.getAttribute("PAST_TOTAL_INCOME");
