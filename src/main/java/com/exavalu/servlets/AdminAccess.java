@@ -23,20 +23,18 @@ import com.exavalu.pojos.PropertyValues;
 import com.exavalu.services.AccountService;
 import com.exavalu.services.CategoryService;
 import com.exavalu.services.CurrencyService;
-import com.exavalu.services.UserService;
-
 
 /**
- * Servlet implementation class ViewAccount
+ * Servlet implementation class AdminAccess
  */
-@WebServlet("/ViewAccount")
-public class ViewAccount extends HttpServlet {
+@WebServlet("/AdminAccess")
+public class AdminAccess extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ViewAccount() {
+    public AdminAccess() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -46,7 +44,6 @@ public class ViewAccount extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		// session check
 		User user = (User) request.getSession().getAttribute("USER");
 		
 		if (user != null) {
@@ -87,7 +84,7 @@ public class ViewAccount extends HttpServlet {
 			request.setAttribute("CATEGORIES", categoryList);
 			request.setAttribute("SUBCATEGORIES", subCategoryList);
 			
-			request.getRequestDispatcher("pages/accounts.jsp").forward(request, response);
+			request.getRequestDispatcher("pages/admin.jsp").forward(request, response);
 		}
 		else
 		{
