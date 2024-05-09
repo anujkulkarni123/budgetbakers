@@ -102,11 +102,6 @@ public class CommitRecord extends HttpServlet {
 	        operationSuccess = RecordsService.HandleTransfer(userEmail, currencyName, accountId, secondAccountId, amount, propertyValues);
 	    }
 
-	    	    
-	    	    
-	    
-	    
-
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	    Date recordDate = null;
 	    try {
@@ -118,18 +113,21 @@ public class CommitRecord extends HttpServlet {
 	        return;
 	    }
 
+	    String category = request.getParameter("category");
+	    String subCategory = request.getParameter("subCategory");
 	    if (operationSuccess) {
-	    	boolean saveSuccess = RecordsService.handleSaveRecord(accountId, amount, recordDate, currencyName, type, request.getParameter("paymentStatus"), secondAccountId, userEmail, propertyValues);
+	    	boolean saveSuccess = RecordsService.handleSaveRecord(accountId, amount, recordDate, currencyName, type, request.getParameter("paymentStatus"), secondAccountId, userEmail, propertyValues, category, subCategory);
 	        if (saveSuccess) {
 				System.out.println("redirect to pages/accounts");
 				
 				ArrayList<AccountType> accountTypes = AccountService.getAccountTypes(propertyValues);
 				ArrayList<Account> accounts = AccountService.getAccounts(user.getEmailAddress(), propertyValues);
 				ArrayList<Currency> currencies = CurrencyService.getCurrencies(propertyValues);
+				request.getSession().setAttribute("ACCOUNTS", accounts);
 				request.setAttribute("ACCOUNTTYPES", accountTypes);
 				request.setAttribute("ACCOUNTS", accounts);
 				request.setAttribute("CURRENCIES", currencies);
-	        	request.getRequestDispatcher("/pages/dashboard.jsp").forward(request, response);
+	        	request.getRequestDispatcher("/ViewAccount").forward(request, response);
 	        } else {
 	            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to save record.");
 	        }

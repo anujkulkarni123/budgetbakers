@@ -302,11 +302,11 @@ public class RecordsService {
 
 	public static boolean handleSaveRecord(int accountId, double amount, Date recordDate,
 			int currencyName, int type, String paymentStatus, int secondAccountId, String userEmail,
-			PropertyValues propertyValues) {
+			PropertyValues propertyValues, String category, String subCategory) {
 		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
 		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
 		
-		String insertSQL = "INSERT INTO records (accountId, amount, recordDate, currencyName, type, secondAccountId, userEmail) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		String insertSQL = "INSERT INTO records (accountId, amount, recordDate, currencyName, type, secondAccountId, userEmail, active, paymentStatus, category, subCategory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try {
             PreparedStatement preparedStatement = con.prepareStatement(insertSQL);
             preparedStatement.setInt(1, accountId);
@@ -316,6 +316,10 @@ public class RecordsService {
             preparedStatement.setInt(5, type);
             preparedStatement.setInt(6, secondAccountId);
             preparedStatement.setString(7, userEmail);
+            preparedStatement.setInt(8, 1);
+            preparedStatement.setInt(9, 1);
+            preparedStatement.setString(10, category);
+            preparedStatement.setString(11, subCategory);
  
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {

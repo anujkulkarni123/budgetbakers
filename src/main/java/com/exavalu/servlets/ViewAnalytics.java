@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.exavalu.entities.Account;
+import com.exavalu.entities.Currency;
 import com.exavalu.entities.Category;
 import com.exavalu.entities.Duration;
 import com.exavalu.entities.Report;
@@ -22,6 +23,7 @@ import com.exavalu.entities.User;
 import com.exavalu.entities.RecordState;
 
 import com.exavalu.pojos.PropertyValues;
+import com.exavalu.services.CurrencyService;
 import com.exavalu.services.TransactionService;
 import com.exavalu.services.UserService;
 
@@ -97,7 +99,7 @@ public class ViewAnalytics extends HttpServlet {
 				TransactionService.getPreviousPeriod(timeRange), "", emailAddress);
 		Hashtable<String, Double> pastPeriodTotalByCategory = TransactionService.getCategoriesExpenses(propertyValues, 
 				TransactionService.getPreviousPeriod(timeRange), "", emailAddress);
-		ArrayList<String> currencies = UserService.getCurrencies(propertyValues);
+		ArrayList<Currency> currencies = CurrencyService.getCurrencies(propertyValues);
 		ArrayList<Account> accounts = TransactionService.getAccounts(propertyValues);
 		ArrayList<String> paymentTypes = TransactionService.getPaymentTypes(propertyValues);
 		ArrayList<RecordState> recordStates = TransactionService.getRecordStates(propertyValues);

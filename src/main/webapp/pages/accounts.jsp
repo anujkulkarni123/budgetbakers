@@ -3,6 +3,7 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="java.util.Map"%>
+<%@ page import="java.text.NumberFormat" %>
 <%@ page import="com.exavalu.entities.Account"%>
 <%@ page import="com.exavalu.entities.AccountType"%>
 <%@ page import="com.exavalu.entities.Currency"%>
@@ -16,7 +17,11 @@
 <title>Account Page</title>
 
 </head>
-<script type="text/javascript">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
 	function openAddAccountPopup() {
 		var popup = document.getElementById('addAccountPopup');
 		popup.style.display = 'block';
@@ -27,8 +32,9 @@
 		popup.style.display = 'none';
 	}
 </script>
+
 <body style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
-	
+
 	<%
 	User currentUser = (User) session.getAttribute("USER");
 	System.out.println("currentUser");
@@ -55,13 +61,15 @@
 	System.out.println(accounts);
 	System.out.println(accountTypeList);
 	request.setAttribute("accounts", accounts);
-    request.setAttribute("accountTypeList", accountTypeList);
-    request.setAttribute("currencyList", currencyList);
-    request.setAttribute("accountTypeMap", accountTypeMap);
-    request.setAttribute("currencyMap", currencyMap);
-    request.setAttribute("categoryList", categoryList);
-    request.setAttribute("SubCategoryList", SubCategoryList);
-    
+	request.setAttribute("accountTypeList", accountTypeList);
+	request.setAttribute("currencyList", currencyList);
+	request.setAttribute("accountTypeMap", accountTypeMap);
+	request.setAttribute("currencyMap", currencyMap);
+	request.setAttribute("categoryList", categoryList);
+	request.setAttribute("SubCategoryList", SubCategoryList);
+	
+	NumberFormat formatter = NumberFormat.getCurrencyInstance();
+	
 	%>
 	<jsp:include page="components/dashboardHeader.jsp" />
 	<div
@@ -152,7 +160,7 @@
 				iconPath = "images/savings.png";
 					}
 			%>
-			<div
+			<div id="account_<%=account.getAccountId()%>"
 				style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 10px; background-color: white; border-radius: 5px; padding: 10px;">
 				<%
 				if (!iconPath.isEmpty()) {
@@ -169,7 +177,7 @@
 					<%=accountTypeMap.get(account.getAccountTypeId())%></p>
 				<p
 					style="flex: 3; text-align: right; margin: 0; padding-left: 10px;">
-					<%=account.getAccountBalance()%>
+					<%=formatter.format(account.getAccountBalance())%>
 					<%=currencyMap.get(account.getCurrencyId())%></p>
 			</div>
 			<%

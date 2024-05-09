@@ -16,11 +16,13 @@ import javax.servlet.http.HttpSession;
 
 import com.exavalu.entities.AnalyticFilter;
 import com.exavalu.entities.Category;
+import com.exavalu.entities.Currency;
 import com.exavalu.entities.Duration;
 import com.exavalu.entities.Report;
 import com.exavalu.entities.User;
 import com.exavalu.pojos.PropertyValues;
 import com.exavalu.services.AnalyticFilterService;
+import com.exavalu.services.CurrencyService;
 import com.exavalu.services.TransactionService;
 import com.exavalu.services.UserService;
 
@@ -79,7 +81,7 @@ public class LoadReport extends HttpServlet {
 		request.setAttribute("REPORTID", reportId);
 		ArrayList<Report> reports = UserService.getReports(propertyValues);
 		ArrayList<Category> categories = UserService.getCategories(propertyValues);
-		ArrayList<String> currencies = UserService.getCurrencies(propertyValues);
+		ArrayList<Currency> currencies = CurrencyService.getCurrencies(propertyValues);
 		request.setAttribute("REPORTS", reports);
 		request.setAttribute("CATEGORIES", categories);
 		request.setAttribute("CURRENCIES", currencies);
