@@ -1,7 +1,78 @@
+window.selectedCards = window.selectedCards || [];
+
 document.addEventListener("DOMContentLoaded", function(event) {
-    createGauges();
+    fetchData()
+    
     enableSortable();
 });
+
+function fetchData() {
+    fetch('ViewDashboard', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            // Include necessary data or keep empty if no data is required
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json(); // Parse the JSON of the response
+    })
+    .then(data => {
+        console.log('Success:', data);
+        updateUI(data); // Function to update UI with received data
+    })
+    .catch((error) => {
+        console.error('Fetch error:', error);
+    });
+}
+
+function updateUI(data) {
+    const modalBody = document.querySelector('#addCardModal .modal-body');
+    modalBody.innerHTML = ''; // Clear existing content
+
+    if (!data.nonDefaultCardsByType) {
+        console.error('Data does not contain nonDefaultCardsByType');
+        return; // Add error handling or a default state
+    }
+
+    console.log('Updating UI with data:', data.nonDefaultCardsByType);
+    
+    window.selectedCards = data.defaultCards;
+    
+    renderSelectedCards();
+
+    Object.keys(data.nonDefaultCardsByType).forEach(type => {
+        const section = document.createElement('div');
+        section.className = 'mb-4';
+
+        const header = document.createElement('h6');
+        header.className = 'text-uppercase';
+        header.textContent = type;
+        section.appendChild(header);
+
+        data.nonDefaultCardsByType[type].forEach(card => {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card m-2';
+            cardDiv.id = 'card'; // Note: IDs should be unique per document. Consider using class or data-* attributes instead.
+            cardDiv.onclick = function(event) { addCard(JSON.stringify(card), event); };
+            cardDiv.innerHTML = `
+                <h5 class="card-title">${card.name}</h5>
+                <hr>
+                <div class="card-body">${card.json}</div>
+            `;
+            section.appendChild(cardDiv);
+        });
+
+        modalBody.appendChild(section);
+    });
+}
+
+
 
 function createGauges() {
     ['balanceGauge', 'cashFlowGauge', 'spendingGauge'].forEach(gauge => {
@@ -73,7 +144,7 @@ function enableSortable() {
     $("#cardRow").disableSelection();
 }
 
-window.selectedCards = window.selectedCards || [];
+
 
 function addCard(encodedCardJson, evt) {
 	
@@ -115,7 +186,7 @@ function renderSelectedCards() {
         const cardElement = document.createElement('div');
         cardElement.className = 'col-lg-4 col-md-6';
         cardElement.innerHTML = `
-            <div class="card m-2">
+            <div class="card m-2 p-2" id="card">
                 <h5 class="card-title">${card.name}</h5>
                 <hr>
                 <div class="card-body">${card.json}</div>
@@ -123,5 +194,7 @@ function renderSelectedCards() {
         `;
         cardContainer.appendChild(cardElement);
     });
+    
+    createGauges();
 }
 

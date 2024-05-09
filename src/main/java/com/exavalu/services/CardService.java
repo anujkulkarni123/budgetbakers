@@ -29,6 +29,7 @@ public class CardService {
                 card.setType(rs.getString("type"));
                 card.setJson(rs.getString("json"));
                 card.setName(rs.getString("name"));
+                card.setIsDefault(rs.getBoolean("default"));
                 cards.add(card);
             }
             System.out.println("Cards retrieval success");

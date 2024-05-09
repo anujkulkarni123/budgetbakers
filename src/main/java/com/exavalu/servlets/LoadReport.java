@@ -21,6 +21,7 @@ import com.exavalu.entities.Report;
 import com.exavalu.entities.User;
 import com.exavalu.pojos.PropertyValues;
 import com.exavalu.services.AnalyticFilterService;
+import com.exavalu.services.FilterService;
 import com.exavalu.services.TransactionService;
 import com.exavalu.services.UserService;
 
@@ -79,7 +80,7 @@ public class LoadReport extends HttpServlet {
 		request.setAttribute("REPORTID", reportId);
 		ArrayList<Report> reports = UserService.getReports(propertyValues);
 		ArrayList<Category> categories = UserService.getCategories(propertyValues);
-		ArrayList<String> currencies = UserService.getCurrencies(propertyValues);
+		ArrayList<String> currencies = FilterService.getCurrencies(propertyValues);
 		request.setAttribute("REPORTS", reports);
 		request.setAttribute("CATEGORIES", categories);
 		request.setAttribute("CURRENCIES", currencies);

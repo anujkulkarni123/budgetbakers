@@ -33,7 +33,7 @@
 
 
 </head>
-<body>
+<body class="bg-secondary-subtle">
 	<%
 	Gson gson = new Gson();
 	
@@ -75,28 +75,10 @@
 	<%@ include file="components/dashboardHeader.jsp"%>
 
 	<div class="content">
-		<div class="account-container">Add Accounts PlaceHolder</div>
-
-		<div class="container mt-4">
+		<div class="container mt-4 ">
 			<div class="row">
 				<div class="row" id="cardRow">
-					<!-- This row will contain all the cards -->
-					<%-- <%
-					    List<Card> cards = (List<Card>) request.getAttribute("CARDS");
-					    for (Card card : cards) {
-					    %>
-					        <div class="col-lg-4 col-md-6">
-					            <div class="card m-2" id="card"> <!-- Ensuring unique ID -->
-					                <h5 class="card-title"><%=card.getName()%></h5>
-					                <hr>
-					                <div class="card-body">
-					                    <%=card.getJson()%>
-					                </div>
-					            </div>
-					        </div>
-					    <%
-					    }
-					    %> --%>
+
 				</div>
 
 				<div class="col-12">
@@ -131,33 +113,8 @@
 								aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
-							<%
-							    Map<String, List<Card>> cardsByType = (Map<String, List<Card>>) request.getAttribute("CARDS_BY_TYPE");
-							    for (Map.Entry<String, List<Card>> entry : cardsByType.entrySet()) {
-							        String type = entry.getKey();
-							        List<Card> cardsForType = entry.getValue();
-							%>
-							<div class="mb-4">
-								<h6 class="text-uppercase"><%=type%></h6>
-								<%
-							        for (Card card : cardsForType) {
-							    %>
-								<!-- Example of a card in the modal with the onClick handler -->
-								<div class="card m-2" onClick="addCard('<%= URLEncoder.encode(gson.toJson(card), "UTF-8") %>', event)">
-								    <h5 class="card-title"><%= card.getName() %></h5>
-								    <hr>
-								    <div class="card-body">
-								        <%= card.getJson() %>
-								    </div>
-								</div>
-								<%
-							        }
-							    %>
-							</div>
-							<%
-							    }
-							%>
-						</div>
+							
+						</div> 
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary"
 								data-bs-dismiss="modal">Close</button>

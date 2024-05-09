@@ -79,7 +79,7 @@
 	flex-direction: column;
 	margin-top: 7vh;
 	width: 100%;
-	height: 90vh;
+	height: 100%;
 }
 
 .account-container {
@@ -196,4 +196,5 @@ hr {
 .bi.bi-plus {
     fill: #0d6efd; /* Change the color of the plus icon if needed */
 }
+
 

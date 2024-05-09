@@ -5,6 +5,7 @@ public class Card {
 	private String type;
 	private String json;
 	private String name;
+	private Boolean isDefault;
 	
 	public String getType() {
 		return type;
@@ -23,6 +24,12 @@ public class Card {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public Boolean isDefault() {
+		return isDefault;
+	}
+	public void setIsDefault(Boolean isDefault) {
+		this.isDefault = isDefault;
 	}
 	
 	

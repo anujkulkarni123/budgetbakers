@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
+import org.json.JSONArray;
+
 /**
  * Servlet implementation class ViewDashboard
  */
@@ -36,7 +39,14 @@ public class ViewDashboard extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Load property values
+        request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
+    }
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	// Load property values
         ServletContext context = getServletContext();
         Properties properties = new Properties();
         PropertyValues propertyValues = PropertyValues.getInstance();
@@ -60,21 +70,26 @@ public class ViewDashboard extends HttpServlet {
             throw new ServletException("Failed to load configuration properties", ex);
         }
 
-        // Get cards from CardsService
+        // Retrieve all cards
         List<Card> cards = CardService.getCards(propertyValues);
-		Map<String, List<Card>> cardsByType = cards.stream().collect(Collectors.groupingBy(Card::getType));
-		request.setAttribute("CARDS_BY_TYPE", cardsByType);
-        request.setAttribute("CARDS", cards);
+        Map<Boolean, List<Card>> groupedByDefault = cards.stream()
+            .collect(Collectors.partitioningBy(Card::isDefault));
 
-        // Forward to JSP
-        request.getRequestDispatcher("pages/dashboard.jsp").forward(request, response);
-    }
+        List<Card> defaultCards = groupedByDefault.get(true);
+        List<Card> nonDefaultCards = groupedByDefault.get(false);
 
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Delegate to doGet
-        doGet(request, response);
+        Map<String, List<Card>> nonDefaultCardsByType = nonDefaultCards.stream()
+            .collect(Collectors.groupingBy(Card::getType));
+
+        // Create JSON response
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("defaultCards", new JSONArray(defaultCards)); // Assuming Card has a suitable toJSON method
+        jsonResponse.put("nonDefaultCardsByType", new JSONObject(nonDefaultCardsByType));
+
+        // Send JSON as response
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(jsonResponse.toString());
+        response.getWriter().close();
     }
 }
