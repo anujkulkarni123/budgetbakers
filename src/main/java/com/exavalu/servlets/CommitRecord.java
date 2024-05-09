@@ -121,6 +121,7 @@ public class CommitRecord extends HttpServlet {
 				ArrayList<AccountType> accountTypes = AccountService.getAccountTypes(propertyValues);
 				ArrayList<Account> accounts = AccountService.getAccounts(user.getEmailAddress(), propertyValues);
 				ArrayList<Currency> currencies = CurrencyService.getCurrencies(propertyValues);
+				request.getSession().setAttribute("ACCOUNTS", accounts);
 				request.setAttribute("ACCOUNTTYPES", accountTypes);
 				request.setAttribute("ACCOUNTS", accounts);
 				request.setAttribute("CURRENCIES", currencies);

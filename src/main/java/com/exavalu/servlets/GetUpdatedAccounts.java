@@ -71,7 +71,10 @@ public class GetUpdatedAccounts extends HttpServlet {
 	    // Convert account data to JSON using Gson
 	    Gson gson = new Gson();
 	    String json = gson.toJson(updatedAccounts);
-
+	    
+	    System.out.println("THE JSON IS");
+	    System.out.println(json);
+	    
 	    // Send the JSON response
 	    response.setContentType("application/json");
 	    response.setStatus(HttpServletResponse.SC_OK);

@@ -20,37 +20,6 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
-	function updateAccountInDOM(accountsData) {
-		accountsData.forEach(function(updatedAccount) {
-			var accountElement = $("#account_" + updatedAccount.accountId);
-			accountElement.find(".account-balance").text(
-					updatedAccount.accountBalance);
-		});
-	}
-
-	function updateAccount() {
-		$.ajax({
-			type : "GET",
-			url : "/GetUpdatedAccounts",
-			success : function(response) {
-				updateAccountInDOM(response);
-			},
-			error : function(xhr, status, error) {
-				console.error("Error updating account:", error);
-			}
-		});
-	}
-	
-    document.addEventListener('DOMContentLoaded', function() {
-        var form = document.getElementById('myForm');
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            updateAccount();
-            form.submit();
-        });
-    });
-</script>
 
 <script>
 	function openAddAccountPopup() {
