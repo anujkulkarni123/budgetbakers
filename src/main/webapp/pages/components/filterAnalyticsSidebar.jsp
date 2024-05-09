@@ -1,10 +1,11 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="com.exavalu.entities.Category"%>
+<%@ page import="com.exavalu.entities.Currency"%>
 <%@ page import="com.exavalu.entities.Account"%>
 <%@ page import="com.exavalu.entities.RecordState"%>
 
 <%
-ArrayList<String> sidebarCurrencies = (ArrayList<String>) request.getAttribute("SIDEBAR_CURRENCIES");
+ArrayList<Currency> sidebarCurrencies = (ArrayList<Currency>) request.getAttribute("SIDEBAR_CURRENCIES");
 ArrayList<Category> sidebarCategories = (ArrayList<Category>) request.getAttribute("SIDEBAR_CATEGORIES");
 ArrayList<String> sidebarPaymentTypes = (ArrayList<String>) request.getAttribute("SIDEBAR_PAYMENTTYPES");
 ArrayList<RecordState> sidebarRecordStates = (ArrayList<RecordState>) request.getAttribute("SIDEBAR_RECORDSTATES");
@@ -117,12 +118,12 @@ ArrayList<Account> sidebarAccounts = (ArrayList<Account>) request.getAttribute("
 									class="form-check-label" for="flexCheckDefault"> All</label>
 							</div>
 							<%
-							for (String currency : sidebarCurrencies) {
+							for (Currency currency : sidebarCurrencies) {
 							%>
 							<div class="form-check">
 								<input class="form-check-input" type="checkbox"
-									value="<%=currency%>" id="flexCheckDefault"> <label
-									class="form-check-label" for="flexCheckDefault"> <%=currency%></label>
+									value="<%=currency.getCurrencyName()%>" id="flexCheckDefault"> <label
+									class="form-check-label" for="flexCheckDefault"> <%=currency.getCurrencyName()%></label>
 							</div>
 							<%
 							}
