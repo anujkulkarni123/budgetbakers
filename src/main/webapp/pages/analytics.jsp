@@ -66,10 +66,10 @@ html, body {
 	
 	%>
 </head>
-<body>
-	<%@ include file="components/dashboardHeader.jsp"%>
-	<div class="container-fluid d-flex flex-column bg-secondary-subtle">
-		<div style="min-width: 201px;" class="dropdown-center d-flex justify-content-center mt-2">
+<body class="bg-secondary-subtle">
+	<div class="row"><%@ include file="components/dashboardHeader.jsp"%></div>
+	<div class="container-fluid row d-flex flex-column mt-5">
+		<div style="min-width: 201px;" class="dropdown-center d-flex justify-content-center mt-4">
 			<div class="dropdown">
 				<button id="toggleDuration" type="button" style="min-width: 201px; padding-right: 8rem;"
 					class="btn btn-light dropdown-toggle mt-3 mb-3"
