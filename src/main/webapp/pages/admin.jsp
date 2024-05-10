@@ -64,7 +64,6 @@ h2, h3 {
 	width: 100%;
 	padding-top: 50px;
 }
-
 </style>
 <script>
 function showSelectedTable() {
@@ -113,8 +112,8 @@ function showSelectedTable() {
 	%>
 	<div class="title-and-dropdown">
 		<h2>Data Management</h2>
-		<label for="dataSelector">Choose data to edit:</label>
-		<select id="dataSelector" onchange="showSelectedTable()">
+		<label for="dataSelector">Choose data to edit:</label> <select
+			id="dataSelector" onchange="showSelectedTable()">
 			<option value="currencyTable">Currencies</option>
 			<option value="categoryTable">Categories</option>
 			<option value="subCategoryTable">SubCategories</option>
@@ -123,7 +122,6 @@ function showSelectedTable() {
 	<div class="container">
 		<jsp:include page="components/dashboardHeader.jsp" />
 		<div id="currencyTable" class="data-table hidden">
-
 			<form action="SaveCurrenciesServlet" method="post">
 				<table>
 					<tr>
@@ -132,19 +130,31 @@ function showSelectedTable() {
 						<th>Conversion Rate</th>
 						<th>Action</th>
 					</tr>
-					<% for (Currency currency : currencyList) { %>
+					<%
+					for (Currency currency : currencyList) {
+					%>
 					<tr>
 						<td><%=currency.getId()%></td>
-						<td><input type="text" name="currencyName<%=currency.getId()%>" value="<%=currency.getCurrencyName()%>"></td>
-						<td><input type="text" name="conversionRate<%=currency.getId()%>" value="<%=currency.getConversionRate()%>"></td>
+						<!-- Hidden input for currency ID -->
+						<input type="hidden" name="currencyId"
+							value="<%=currency.getId()%>">
+						<td><input type="text" name="currencyName"
+							value="<%=currency.getCurrencyName()%>"></td>
+						<td><input type="text" name="conversionRate"
+							value="<%=currency.getConversionRate()%>"></td>
 						<td><button type="submit">Save</button></td>
 					</tr>
-					<% } %>
+					<%
+					}
+					%>
 					<tr>
 						<td>New</td>
-						<td><input type="text" name="newCurrencyName" placeholder="Enter name"></td>
-						<td><input type="text" name="newConversionRate" placeholder="Enter rate"></td>
-						<td><button type="submit" name="action" value="addCurrency">Add New Currency</button></td>
+						<td><input type="text" name="newCurrencyName"
+							placeholder="Enter name"></td>
+						<td><input type="text" name="newConversionRate"
+							placeholder="Enter rate"></td>
+						<td><button type="submit" name="action" value="addCurrency">Add
+								New Currency</button></td>
 					</tr>
 				</table>
 			</form>
@@ -158,21 +168,31 @@ function showSelectedTable() {
 						<th>Category Name</th>
 						<th>Action</th>
 					</tr>
-					<% for (Category category : categoryList) { %>
+					<%
+					for (Category category : categoryList) {
+					%>
 					<tr>
 						<td><%=category.getCategoryId()%></td>
-						<td><input type="text" name="categoryName<%=category.getCategoryId()%>" value="<%=category.getCategoryName()%>"></td>
+						<input type="hidden" name="categoryId"
+							value="<%=category.getCategoryId()%>">
+						<td><input type="text" name="categoryName"
+							value="<%=category.getCategoryName()%>"></td>
 						<td><button type="submit">Save</button></td>
 					</tr>
-					<% } %>
+					<%
+					}
+					%>
 					<tr>
 						<td>New</td>
-						<td><input type="text" name="newCategoryName" placeholder="Enter name"></td>
-						<td><button type="submit" name="action" value="addCategory">Add New Category</button></td>
+						<td><input type="text" name="newCategoryName"
+							placeholder="Enter name"></td>
+						<td><button type="submit" name="action" value="addCategory">Add
+								New Category</button></td>
 					</tr>
 				</table>
 			</form>
 		</div>
+
 
 		<div id="subCategoryTable" class="data-table hidden">
 			<form action="SaveSubCategoriesServlet" method="post">
@@ -183,27 +203,42 @@ function showSelectedTable() {
 						<th>SubCategory Name</th>
 						<th>Action</th>
 					</tr>
-					<% for (SubCategory subCategory : SubCategoryList) { %>
+					<%
+					for (SubCategory subCategory : SubCategoryList) {
+					%>
 					<tr>
 						<td><%=subCategory.getSubCategoryId()%></td>
-						<td><%=subCategory.getCategoryId()%></td>
-						<td><input type="text" name="subCategoryName<%=subCategory.getSubCategoryId()%>" value="<%=subCategory.getSubCategoryName()%>"></td>
+						<input type="hidden" name="subCategoryId"
+							value="<%=subCategory.getSubCategoryId()%>">
+						<td><input type="hidden" name="categoryId"
+							value="<%=subCategory.getCategoryId()%>"> <%=subCategory.getCategoryId()%></td>
+						<td><input type="text" name="subCategoryName"
+							value="<%=subCategory.getSubCategoryName()%>"></td>
 						<td><button type="submit">Save</button></td>
 					</tr>
-					<% } %>
+					<%
+					}
+					%>
 					<tr>
 						<td>New</td>
 						<td><select name="newSubCategoryCategoryId">
-							<% for (Category category : categoryList) { %>
-							<option value="<%=category.getCategoryId()%>"><%=category.getCategoryName()%></option>
-							<% } %>
+								<%
+								for (Category category : categoryList) {
+								%>
+								<option value="<%=category.getCategoryId()%>"><%=category.getCategoryName()%></option>
+								<%
+								}
+								%>
 						</select></td>
-						<td><input type="text" name="newSubCategoryName" placeholder="Enter name"></td>
-						<td><button type="submit" name="action" value="addSubCategory">Add New SubCategory</button></td>
+						<td><input type="text" name="newSubCategoryName"
+							placeholder="Enter name"></td>
+						<td><button type="submit" name="action"
+								value="addSubCategory">Add New SubCategory</button></td>
 					</tr>
 				</table>
 			</form>
 		</div>
+
 	</div>
 	<script>
         document.getElementById('currencyTable').style.display = 'table';
