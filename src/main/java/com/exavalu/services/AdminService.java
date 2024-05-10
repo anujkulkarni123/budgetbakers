@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import com.exavalu.entities.Category;
 import com.exavalu.entities.Currency;
+import com.exavalu.entities.SubCategory;
 import com.exavalu.pojos.PropertyValues;
 import com.exavalu.utilities.DbConnectionProvider;
 

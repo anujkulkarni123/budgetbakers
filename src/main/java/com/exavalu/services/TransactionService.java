@@ -1,6 +1,8 @@
 package com.exavalu.services;
 
 import java.sql.Connection;
+import com.exavalu.entities.SubCategory;
+import com.exavalu.entities.Currency;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
