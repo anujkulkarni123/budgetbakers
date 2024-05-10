@@ -57,7 +57,7 @@
     }
 </script>
 
-<nav class="navbar navbar-expand-lg navbar-white fixed-top">
+<nav class="navbar navbar-expand-lg navbar-white fixed-top shadow-sm" style="background-color: white;">
 	<jsp:include page="/pages/components/recordPopup.jsp" />
 
 	<div class="container-fluid ps-4 pe-4 fw-bold">
