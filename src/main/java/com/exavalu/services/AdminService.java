@@ -113,4 +113,52 @@ public class AdminService {
 		}
 		return (row > 0);
 	}
+
+	public static boolean addSubCategory(SubCategory subcategory, PropertyValues propertyValues) {
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		String sql = "INSERT INTO SubCategories (categoryId, subCategoryName) VALUES (?, ?)";
+		int row = -1;
+		try(PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, subcategory.getCategoryId());
+			ps.setString(2, subcategory.getSubCategoryName());
+			row = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			// Close the connection
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return (row > 0);
+ 	}
+	public static boolean updateSubCategory(SubCategory subcategory, PropertyValues propertyValues) {
+		DbConnectionProvider dbConnectionProvider = DbConnectionProvider.getInstance();
+		Connection con = dbConnectionProvider.getDbConnection(propertyValues);
+		String sql = "UPDATE SubCategories SET categoryId = ?, subCategoryName = ? WHERE subCategoryId = ?";
+		int row = -1;
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, subcategory.getCategoryId());
+			ps.setString(2, subcategory.getSubCategoryName());
+			ps.setInt(3, subcategory.getSubCategoryId());
+			row = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			// Close the connection
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} 
+		} 
+		return (row > 0);
+	}
 }
