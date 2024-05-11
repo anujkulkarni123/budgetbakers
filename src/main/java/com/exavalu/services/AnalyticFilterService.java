@@ -99,19 +99,9 @@ public class AnalyticFilterService {
 					}
 					
 					filters.setRecordTypes(filtersFormatted);
-					System.out.println("HI " + filtersFormatted.toString());
 					break;
 				}
 			}
-		}
-		System.out.println("Filters selected: ");
-		
-		for (Integer id: filters.getAccountIds()) {
-			System.out.println(id);
-		}
-		System.out.println("---------------");
-		for (String category: filters.getCategories()) {
-			System.out.println(category);
 		}
 		return filters;
 	}
@@ -137,15 +127,14 @@ public class AnalyticFilterService {
 
 		String queryAccountIdFilter = accountFilters.isEmpty() ? "" : "accountId in " + accountFilters + " AND";
 		String queryCategoriesFilter = categoryFilters.isEmpty() ? "" : " category in " + categoryFilters + " AND";
-		String queryCurrencyFilter = currencyFilters.isEmpty() ? "" : " currencyType in " + currencyFilters + " AND";
+		String queryCurrencyFilter = currencyFilters.isEmpty() ? "" : " currencyName in " + currencyFilters + " AND";
 		String queryPaymentTypes = paymentTypes.isEmpty() ? "" : " paymentType in " + paymentTypes + " AND";
 		String queryRecordStates = recordStates.isEmpty() ? "" : " paymentStatus in " + recordStates + " AND";
-		String queryRecordTypes = recordTypes.isEmpty() ? "" : " transactionType in " + recordTypes; 
+		String queryRecordTypes = recordTypes.isEmpty() ? "" : " recordType in " + recordTypes; // corresponds to transactionType
 		
 		String query = queryAccountIdFilter + queryCategoriesFilter + queryCurrencyFilter + queryPaymentTypes
 				+ queryRecordStates + queryRecordTypes; 
 		if (query.trim().toUpperCase().endsWith("AND")) query = query.trim().substring(0, query.trim().length() - 3);
-		System.out.println("sql: SELECT * FROM TRANSACTIONS WHERE " + query); // need to trim off extra 'AND's 
 		return query;
 	}
 }
