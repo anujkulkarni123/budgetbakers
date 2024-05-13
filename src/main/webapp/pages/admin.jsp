@@ -62,7 +62,7 @@ h2, h3 {
 .title-and-dropdown {
 	text-align: center;
 	width: 100%;
-	padding-top: 50px;
+	padding-top: 70px;
 }
 </style>
 <script>
@@ -117,6 +117,7 @@ function showSelectedTable() {
 			<option value="currencyTable">Currencies</option>
 			<option value="categoryTable">Categories</option>
 			<option value="subCategoryTable">SubCategories</option>
+			<option value="budgetTable">Budget Table</option>
 		</select>
 	</div>
 	<div class="container">
@@ -237,6 +238,10 @@ function showSelectedTable() {
 					</tr>
 				</table>
 			</form>
+		</div>
+		<div id="budgetTable" class="data-table hidden">
+			<jsp:include page="chooseBudget.jsp" />
+		<div>
 		</div>
 
 	</div>
